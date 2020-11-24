@@ -1,0 +1,153 @@
+import "react-native-gesture-handler";
+
+import { StatusBar } from "expo-status-bar";
+import * as React from "react";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import { AppStyles } from "../AppStyles";
+
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+
+import SettingsActivity from "./src/activity/Settings";
+import MainActivity from "./src/activity/MainActivity";
+import LatestNewsActivity from "./src/activity/LatestNewsActivity";
+import LoginActivity from "./src/auth/LoginActivity";
+
+// Import Custom Sidebar
+import CustomSidebarMenu from "./CustomSidebarMenu";
+
+const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+
+const NavigationDrawerStructure = (props) => {
+  //Structure for the navigatin Drawer
+  const toggleDrawer = () => {
+    //Props to open/close the drawer
+    props.navigationProps.toggleDrawer();
+  };
+
+  return (
+    <View style={{ flexDirection: "row" }}>
+      <TouchableOpacity onPress={toggleDrawer}>
+        {/*Donute Button Image */}
+        <Image
+          source={{
+            uri:
+              "https://raw.githubusercontent.com/AboutReact/sampleresource/master/drawerWhite.png",
+          }}
+          style={{ width: 25, height: 25, marginLeft: 5 }}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+};
+function LatestNewsActivityStack({ navigation }) {
+  return (
+    <Stack.Navigator initialRouteName="LatestNewsActivity">
+      <Stack.Screen
+        name="LatestNewsActivity"
+        component={LatestNewsActivity}
+        options={{
+          title: "Latest News", //Set Header Title
+          headerLeft: () => (
+            <NavigationDrawerStructure navigationProps={navigation} />
+          ),
+          headerStyle: {
+            backgroundColor: AppStyles.color.main, //Set Header color
+          },
+          headerTintColor: "#fff", //Set Header text color
+          headerTitleStyle: {
+            fontWeight: "bold", //Set Header text style
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function SettingsActivityStack({ navigation }) {
+  return (
+    <Stack.Navigator initialRouteName="SettingsActivity">
+      <Stack.Screen
+        name="SettingsActivity"
+        component={SettingsActivity}
+        options={{
+          title: "Settings", //Set Header Title
+          headerLeft: () => (
+            <NavigationDrawerStructure navigationProps={navigation} />
+          ),
+          headerStyle: {
+            backgroundColor: AppStyles.color.main, //Set Header color
+          },
+          headerTintColor: "#fff", //Set Header text color
+          headerTitleStyle: {
+            fontWeight: "bold", //Set Header text style
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function MainActivityStack({ navigation }) {
+  return (
+    <Stack.Navigator
+      initialRouteName="MainActivity"
+      screenOptions={{
+        headerLeft: () => (
+          <NavigationDrawerStructure navigationProps={navigation} />
+        ),
+        headerStyle: {
+          backgroundColor: AppStyles.color.main, //Set Header color
+        },
+        headerTintColor: "#fff", //Set Header text color
+        headerTitleStyle: {
+          fontWeight: "bold", //Set Header text style
+        },
+      }}
+    >
+      <Stack.Screen
+        name="MainActivity"
+        component={MainActivity}
+        options={{
+          title: "Home - Rakesh News", //Set Header Title
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function NavigationComponent() {
+  return (
+    <NavigationContainer>
+      <Drawer.Navigator
+        drawerContentOptions={{
+          activeTintColor: AppStyles.main.activeTintColor,
+          itemStyle: { marginVertical: 5 },
+        }}
+        drawerContent={(props) => <CustomSidebarMenu {...props} />}
+      >
+        <Drawer.Screen
+          name="MainActivity"
+          options={{ drawerLabel: "Home" }}
+          component={MainActivityStack}
+        />
+
+        <Drawer.Screen
+          name="LatestNewsActivity"
+          options={{ drawerLabel: "Latest News" }}
+          component={LatestNewsActivityStack}
+        />
+
+        <Drawer.Screen
+          name="SettingsActivity"
+          options={{ drawerLabel: "Settings" }}
+          component={SettingsActivityStack}
+        />
+      </Drawer.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default NavigationComponent;
