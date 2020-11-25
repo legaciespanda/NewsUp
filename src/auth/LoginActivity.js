@@ -1,7 +1,7 @@
 
 import * as React from "react";
 import { StyleSheet, Text, TextInput, View, Button } from "react-native";
-import { AppStyles } from "../AppStyles";
+import { AppStyles } from "../config/AppStyles";
 import firebase from "@react-native-firebase/app";
 import { AsyncStorage } from "react-native";
 

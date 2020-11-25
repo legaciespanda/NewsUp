@@ -1,6 +1,3 @@
-// Custom Navigation Drawer / Sidebar with Image and Icon in Menu Options
-// https://aboutreact.com/custom-navigation-drawer-sidebar-with-image-and-icon-in-menu-options/
-
 import React from "react";
 import {
   SafeAreaView,
@@ -9,13 +6,18 @@ import {
   Image,
   Text,
   Linking,
+  Alert
 } from "react-native";
+
+
 
 import {
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
 } from "@react-navigation/drawer";
+
+//import AsyncStorage from '@react-native-community/async-storage';
 
 const CustomSidebarMenu = (props) => {
   const BASE_PATH =
@@ -62,7 +64,29 @@ const CustomSidebarMenu = (props) => {
         </View>
         <DrawerItem
           label="Logout"
-          onPress={() => Linking.openURL("https://aboutreact.com/")}
+          onPress={() =>
+                      Alert.alert(
+              'Logout',
+              'Are you sure? You want to logout?',
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => {
+                    return null;
+                  },
+                },
+                {
+                  text: 'Confirm',
+                  onPress: () => {
+                    //AsyncStorage.clear();
+                    props.navigation.replace('Auth');
+                    return null;
+                  },
+                },
+              ],
+              {cancelable: false},
+            )
+          }
         />
       </DrawerContentScrollView>
       <Text style={{ fontSize: 16, textAlign: "center", color: "grey" }}>

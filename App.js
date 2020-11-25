@@ -1,4 +1,8 @@
+import 'react-native-gesture-handler';
+
+// Import React and Component
 import React, { useState, useEffect } from "react";
+
 import {
   AppRegistry,
   StyleSheet,
@@ -8,103 +12,137 @@ import {
   Button,
   BackHandler,
 } from "react-native";
-import * as SplashScreen from "expo-splash-screen";
-import NetInfo from "@react-native-community/netinfo";
-import { useNetInfo } from "@react-native-community/netinfo";
-import NetworkUtils from "./src/NetworkUtils";
-import * as Network from "expo-network";
+
+// Import Navigators from React Navigation
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+
+// Import Screens
+import SplashScreen from './src/activity/Splashscreen';
+import LoginActivity from "./src/auth/LoginActivity";
+import RegisterActivity from "./src/auth/RegisterActivity"
+import NavigationComponent from './src/components/Navigation';
+import { AppStyles } from "./src/config/AppStyles";
 
 
-import { checkConnected } from "./src/InternetDetect";
+import { checkConnected } from "./src/config/InternetDetect";
 import NoInternetActivity from "./src/activity/NoInternetActivity";
 
-import LoginActivity from "./src/auth/LoginActivity"
-console.disableYellowBox = true;
+const Stack = createStackNavigator();
+
+const Auth = () => {
+  // Stack Navigator for Login and Sign up Screen
+  return (
+    <Stack.Navigator initialRouteName="LoginActiviy">
+      <Stack.Screen
+        name="LoginActivity"
+        component={LoginActivity}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="RegisterActivity"
+        component={RegisterActivity}
+        options={{
+          title: 'Register', //Set Header Title
+          headerStyle: {
+            backgroundColor: AppStyles.color.main, //Set Header color
+          },
+          headerTintColor: '#fff', //Set Header text color
+          headerTitleStyle: {
+            fontWeight: 'bold', //Set Header text style
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
 
 
- // const [connectStatus, setConnectStatus] = useState();
-class App extends React.Component {
-  state = {
-    isReady: false,
-    setConnectStatus: false,
-  };
+const App = () => {
 
-  CheckConnectivity = () => {
-    NetInfo.isConnected.fetch().then((isConnected) => {
-      if (isConnected) {
-        Alert.alert("You are online!");
-        this.setState({ setConnectStatus: isConnected });
-      } else {
-        Alert.alert("You are offline!");
-      }
-    });
-  };
+  const [connectStatus,setConnectStatus] = useState(false);
+  
+    checkConnected().then(checkConnected=>{
+    setConnectStatus(checkConnected)
+  });
 
-  async componentDidMount() {
+  componentDidMount = () =>{
     //handling back button press
     BackHandler.addEventListener("hardwareBackPress", exitApps);
 
-    // Prevent native splash screen from autohiding
-    try {
-      await SplashScreen.preventAutoHideAsync();
-    } catch (e) {
-      console.warn(e);
-    }
-    this.prepareResources();
-  }
+    //check for internet connection and set connection status
+  //   checkConnected().then(checkConnected=>{
+  //   setConnectStatus(checkConnected)
+  // });
+  };
 
-  componentWillUnmount() {
+    componentWillUnmount = () => {
     BackHandler.removeEventListener("hardwareBackPress", exitApps);
   }
 
-  /**
-   * Method that serves to load resources and make API calls
-   */
-  prepareResources = async () => {
-    try {
-      await checkInternetAccess();
-    } catch (e) {
-      console.warn(e);
-    } finally {
-      this.setState({ appIsReady: true }, async () => {
-        await SplashScreen.hideAsync();
-      });
-    }
-  };
+  return connectStatus ? (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="SplashScreen">
+        {/* SplashScreen which will come once for 5 Seconds */}
 
-  render() {
-    if (!this.state.appIsReady) {
-      return null;
-    }
+        <Stack.Screen
+          name="SplashScreen"
+          component={SplashScreen}
+          // Hiding header for Splash Screen
+          options={{headerShown: false}}
+        />
 
-    return this.state.setConnectStatus ? (
-      <View style={styles.container}>
-        <Text style={styles.text}>SplashScreen Demo! 👋</Text>
-      </View>
+        {/* Auth Navigator: Include Login and Signup */}
+        <Stack.Screen
+          name="Auth"
+          component={Auth}
+          options={{headerShown: false}}
+        />
+
+        {/* Navigation Drawer as a landing page */}
+        <Stack.Screen
+          name="NavigationComponent"
+          component={NavigationComponent}
+          // Hiding header for Navigation Drawer
+          options={{headerShown: false}}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
     ) : (
-      <NoInternetActivity onCheck={this.CheckConnectivity} />
+      <NoInternetActivity onCheck={checkConnected} />
     );
-  }
-}
 
+  // return (
+  //   <NavigationContainer>
+  //     <Stack.Navigator initialRouteName="SplashScreen">
+  //       {/* SplashScreen which will come once for 5 Seconds */}
 
+  //       <Stack.Screen
+  //         name="SplashScreen"
+  //         component={SplashScreen}
+  //         // Hiding header for Splash Screen
+  //         options={{headerShown: false}}
+  //       />
 
-// Put any code you need to prepare your app in these functions
-async function checkInternetAccess() {
-  await SplashScreen.hideAsync();
-  //setTimeout(this.setState({ appIsReady: true }),900);
-  setTimeout(SplashScreen.hide, 900);
-}
+  //       {/* Auth Navigator: Include Login and Signup */}
+  //       <Stack.Screen
+  //         name="Auth"
+  //         component={Auth}
+  //         options={{headerShown: false}}
+  //       />
 
-async function checkInternet() {
-  const isConnected = await NetworkUtils.isNetworkAvailable();
-  if (isConnected) { 
-    <Text style={styles.text}>Connected</Text>;
-  } else {
-    <Text style={styles.text}>Not Connected</Text>;
-  }
+  //       {/* Navigation Drawer as a landing page */}
+  //       <Stack.Screen
+  //         name="NavigationComponent"
+  //         component={NavigationComponent}
+  //         // Hiding header for Navigation Drawer
+  //         options={{headerShown: false}}
+  //       />
+  //     </Stack.Navigator>
+  //   </NavigationContainer>
+  // );
+};
 
-}
 
 const exitApps = () => {
   Alert.alert(
@@ -121,22 +159,5 @@ const exitApps = () => {
     { cancelable: false }
   );
 };
-
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#05014a",
-  },
-  text: {
-    color: "white",
-    fontWeight: "bold",
-  },
-});
-
-AppRegistry.registerComponent("App", () => App);
 
 export default App;

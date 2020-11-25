@@ -3,45 +3,47 @@ import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import { AppStyles } from "../AppStyles";
+import { AppStyles } from "../config/AppStyles";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
-import SettingsActivity from "./src/activity/Settings";
-import MainActivity from "./src/activity/MainActivity";
-import LatestNewsActivity from "./src/activity/LatestNewsActivity";
-import LoginActivity from "./src/auth/LoginActivity";
+import SettingsActivity from "../activity/Settings";
+import MainActivity from "../activity/MainActivity";
+import LatestNewsActivity from "../activity/LatestNewsActivity";
+//import LoginActivity from "./src/auth/LoginActivity";
 
 // Import Custom Sidebar
 import CustomSidebarMenu from "./CustomSidebarMenu";
+import NavigationDrawerHeader from "./NavigationDrawerHeader"
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const NavigationDrawerStructure = (props) => {
-  //Structure for the navigatin Drawer
-  const toggleDrawer = () => {
-    //Props to open/close the drawer
-    props.navigationProps.toggleDrawer();
-  };
+// const NavigationDrawerStructure = (props) => {
+//   //Structure for the navigatin Drawer
+//   const toggleDrawer = () => {
+//     //Props to open/close the drawer
+//     props.navigationProps.toggleDrawer();
+//   };
 
-  return (
-    <View style={{ flexDirection: "row" }}>
-      <TouchableOpacity onPress={toggleDrawer}>
-        {/*Donute Button Image */}
-        <Image
-          source={{
-            uri:
-              "https://raw.githubusercontent.com/AboutReact/sampleresource/master/drawerWhite.png",
-          }}
-          style={{ width: 25, height: 25, marginLeft: 5 }}
-        />
-      </TouchableOpacity>
-    </View>
-  );
-};
+//   return (
+//     <View style={{ flexDirection: "row" }}>
+//       <TouchableOpacity onPress={toggleDrawer}>
+//         {/*Donute Button Image */}
+//         <Image
+//           source={{
+//             uri:
+//               "https://raw.githubusercontent.com/AboutReact/sampleresource/master/drawerWhite.png",
+//           }}
+//           style={{ width: 25, height: 25, marginLeft: 5 }}
+//         />
+//       </TouchableOpacity>
+//     </View>
+//   );
+// };
+
 function LatestNewsActivityStack({ navigation }) {
   return (
     <Stack.Navigator initialRouteName="LatestNewsActivity">
@@ -51,7 +53,8 @@ function LatestNewsActivityStack({ navigation }) {
         options={{
           title: "Latest News", //Set Header Title
           headerLeft: () => (
-            <NavigationDrawerStructure navigationProps={navigation} />
+            //<NavigationDrawerStructure navigationProps={navigation} />
+            <NavigationDrawerHeader navigationProps={navigation} />
           ),
           headerStyle: {
             backgroundColor: AppStyles.color.main, //Set Header color
@@ -75,7 +78,8 @@ function SettingsActivityStack({ navigation }) {
         options={{
           title: "Settings", //Set Header Title
           headerLeft: () => (
-            <NavigationDrawerStructure navigationProps={navigation} />
+            //<NavigationDrawerStructure navigationProps={navigation} />
+            <NavigationDrawerHeader navigationProps={navigation} />
           ),
           headerStyle: {
             backgroundColor: AppStyles.color.main, //Set Header color
@@ -96,7 +100,8 @@ function MainActivityStack({ navigation }) {
       initialRouteName="MainActivity"
       screenOptions={{
         headerLeft: () => (
-          <NavigationDrawerStructure navigationProps={navigation} />
+          //<NavigationDrawerStructure navigationProps={navigation} />
+          <NavigationDrawerHeader navigationProps={navigation} />
         ),
         headerStyle: {
           backgroundColor: AppStyles.color.main, //Set Header color
