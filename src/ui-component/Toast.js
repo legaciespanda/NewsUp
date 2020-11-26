@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import { Snackbar } from "react-native-paper";
 import { StyleSheet, View, Text } from "react-native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
-import { theme } from "../core/theme";
+import { theme } from "../core/Theme";
 
 const Toast = ({ type = "error", message, onDismiss }) => (
     <View style={styles.container}>
