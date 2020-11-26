@@ -1,6 +1,7 @@
 import React, { memo } from "react";
 import { ActivityIndicator } from "react-native";
 import "@react-native-firebase/auth";
+//import auth from "@react-native-firebase/auth";
 import Background from "../components/Background";
 import { theme } from "../core/theme";
 import { FIREBASE_CONFIG } from "../core/config";
