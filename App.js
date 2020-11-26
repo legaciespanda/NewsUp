@@ -1,8 +1,8 @@
 import 'react-native-gesture-handler';
-
 // Import React and Component
 import React, { useState, useEffect } from "react";
-
+import { Provider as PaperProvider } from 'react-native-paper';
+import { name as appName } from './app.json';
 import {
   AppRegistry,
   StyleSheet,
@@ -12,6 +12,7 @@ import {
   Button,
   BackHandler,
 } from "react-native";
+
 
 // Import Navigators from React Navigation
 import {NavigationContainer} from '@react-navigation/native';
@@ -81,6 +82,7 @@ const App = () => {
   }
 
   return connectStatus ? (
+    <PaperProvider>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SplashScreen">
         {/* SplashScreen which will come once for 5 Seconds */}
@@ -107,9 +109,12 @@ const App = () => {
           options={{headerShown: false}}
         />
       </Stack.Navigator>
-    </NavigationContainer>
-    ) : (
-      <NoInternetActivity onCheck={checkConnected} />
+      </NavigationContainer>
+    </PaperProvider>
+  ) : (
+      <PaperProvider>
+        <NoInternetActivity onCheck={checkConnected} />
+      </PaperProvider>
     );
 
   // return (
@@ -161,3 +166,5 @@ const exitApps = () => {
 };
 
 export default App;
+
+AppRegistry.registerComponent(appName, () => App);
