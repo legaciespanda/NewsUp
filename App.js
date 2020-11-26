@@ -62,8 +62,10 @@ const Auth = () => {
 
 const App = () => {
 
-  const [connectStatus,setConnectStatus] = useState(false);
   
+  const [connectStatus, setConnectStatus] = useState(false);
+  
+  //check for internet connection and set connection status
     checkConnected().then(checkConnected=>{
     setConnectStatus(checkConnected)
   });
