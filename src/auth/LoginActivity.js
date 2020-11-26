@@ -45,11 +45,11 @@ const LoginActivity = ({ navigation }) => {
 
   return (
     <Background>
-      <BackButton goBack={() => navigation.navigate("HomeScreen")} />
+      {/* <BackButton goBack={() => navigation.navigate("HomeScreen")} /> */}
 
       <Logo />
 
-      <Header>Welcome back to DigiWigi.</Header>
+      <Header>Welcome back to DigiWigi</Header>
 
       <TextInput
         label="Email"
@@ -84,12 +84,12 @@ const LoginActivity = ({ navigation }) => {
       </View>
 
       <Button loading={loading} mode="contained" onPress={_onLoginPressed}>
-        Login
+        Login to DigiWigi
       </Button>
 
       <View style={styles.row}>
         <Text style={styles.label}>Don’t have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")}>
+        <TouchableOpacity onPress={() => navigation.navigate("RegisterActivity")}>
           <Text style={styles.link}>Sign up on DigiWigi</Text>
         </TouchableOpacity>
       </View>

@@ -8,8 +8,9 @@ const numColumns = 2;
 export const AppStyles = {
          color: {
            //05014a
+           deepblue: "#00008B",
            activeTintColor: "#0021f3",
-           main: "#5ea23a",
+           main: "#00008B",
            text: "#696969",
            title: "#464646",
            subtitle: "#545454",

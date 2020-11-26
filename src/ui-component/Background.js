@@ -6,6 +6,7 @@ import {
 } from "react-native";
 
 const Background = ({ children }) => (
+
     <ImageBackground
         source={require("../../assets/auth/background_dot.png")}
         resizeMode="repeat"
