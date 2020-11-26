@@ -1,155 +1,121 @@
+import React, { memo, useState } from "react";
+import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
+import Background from "../ui-component/Background";
+import Logo from "../ui-component/Logo";
+import Header from "../ui-component/Header";
+import Button from "../ui-component/Button";
+import TextInput from "../ui-component/TextInput";
+import BackButton from "../ui-component/BackButton";
+import { theme } from "../core/Theme";
+import { emailValidator, passwordValidator } from "../core/Utils";
+import { loginUser } from "../api/Firsebaseauth-api";
+import Toast from "../ui-component/Toast";
 
-import * as React from "react";
-import { StyleSheet, Text, TextInput, View, Button } from "react-native";
-import { AppStyles } from "../config/AppStyles";
-import firebase from "@react-native-firebase/app";
-import { AsyncStorage } from "react-native";
+const LoginActivity = ({ navigation }) => {
+  const [email, setEmail] = useState({ value: "", error: "" });
+  const [password, setPassword] = useState({ value: "", error: "" });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-class LoginActivity extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true,
-      email: "",
-      password: "",
-    };
-  }
+  const _onLoginPressed = async () => {
+    if (loading) return;
 
-  onPressLogin = () => {
-    const { email, password } = this.state;
-    if (email.length <= 0 || password.length <= 0) {
-      alert("Please fill out the required fields.");
+    const emailError = emailValidator(email.value);
+    const passwordError = passwordValidator(password.value);
+
+    if (emailError || passwordError) {
+      setEmail({ ...email, error: emailError });
+      setPassword({ ...password, error: passwordError });
       return;
     }
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((response) => {
-        const { navigation } = this.props;
-        user_uid = response.user._user.uid;
-        firebase
-          .firestore()
-          .collection("users")
-          .doc(user_uid)
-          .get()
-          .then(function (user) {
-            if (user.exists) {
-              AsyncStorage.setItem("@loggedInUserID:id", user_uid);
-              AsyncStorage.setItem("@loggedInUserID:key", email);
-              AsyncStorage.setItem("@loggedInUserID:password", password);
-              navigation.dispatch({ type: "Login", user: user });
-            } else {
-              alert("User does not exist. Please try again.");
-            }
-          })
-          .catch(function (error) {
-            const { code, message } = error;
-            alert(message);
-          });
-      })
-      .catch((error) => {
-        const { code, message } = error;
-        alert(message);
-        // For details of error codes, see the docs
-        // The message contains the default Firebase string
-        // representation of the error
-      });
+
+    setLoading(true);
+
+    const response = await loginUser({
+      email: email.value,
+      password: password.value,
+    });
+
+    if (response.error) {
+      setError(response.error);
+    }
+
+    setLoading(false);
   };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={[styles.title, styles.leftTitle]}>Sign In</Text>
-        <View style={styles.InputContainer}>
-          <TextInput
-            style={styles.body}
-            placeholder="E-mail or phone number"
-            onChangeText={(text) => this.setState({ email: text })}
-            value={this.state.email}
-            placeholderTextColor={AppStyles.color.grey}
-            underlineColorAndroid="transparent"
-          />
-        </View>
-        <View style={styles.InputContainer}>
-          <TextInput
-            style={styles.body}
-            secureTextEntry={true}
-            placeholder="Password"
-            onChangeText={(text) => this.setState({ password: text })}
-            value={this.state.password}
-            placeholderTextColor={AppStyles.color.grey}
-            underlineColorAndroid="transparent"
-          />
-        </View>
-            <Button
-                containerStyle={styles.loginContainer}
-                style={styles.loginText}
-                title="Login"
-          onPress={() => this.onPressLogin()}
-        />
+  return (
+    <Background>
+      <BackButton goBack={() => navigation.navigate("HomeScreen")} />
+
+      <Logo />
+
+      <Header>Welcome back to DigiWigi.</Header>
+
+      <TextInput
+        label="Email"
+        returnKeyType="next"
+        value={email.value}
+        onChangeText={(text) => setEmail({ value: text, error: "" })}
+        error={!!email.error}
+        errorText={email.error}
+        autoCapitalize="none"
+        autoCompleteType="email"
+        textContentType="emailAddress"
+        keyboardType="email-address"
+      />
+
+      <TextInput
+        label="Password"
+        returnKeyType="done"
+        value={password.value}
+        onChangeText={(text) => setPassword({ value: text, error: "" })}
+        error={!!password.error}
+        errorText={password.error}
+        secureTextEntry
+        autoCapitalize="none"
+      />
+
+      <View style={styles.forgotPassword}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("ForgotPasswordScreen")}
+        >
+          <Text style={styles.label}>Forgot your password?</Text>
+        </TouchableOpacity>
       </View>
-    );
-  }
-}
+
+      <Button loading={loading} mode="contained" onPress={_onLoginPressed}>
+        Login
+      </Button>
+
+      <View style={styles.row}>
+        <Text style={styles.label}>Don’t have an account? </Text>
+        <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")}>
+          <Text style={styles.link}>Sign up on DigiWigi</Text>
+        </TouchableOpacity>
+      </View>
+
+      <Toast message={error} onDismiss={() => setError("")} />
+    </Background>
+  );
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
+  forgotPassword: {
+    width: "100%",
+    alignItems: "flex-end",
+    marginBottom: 24,
   },
-  or: {
-    fontFamily: AppStyles.fontName.main,
-    color: "black",
-    marginTop: 40,
-    marginBottom: 10,
+  row: {
+    flexDirection: "row",
+    marginTop: 4,
   },
-  title: {
-    fontSize: AppStyles.fontSize.title,
+  label: {
+    color: theme.colors.secondary,
+  },
+  link: {
     fontWeight: "bold",
-    color: AppStyles.color.tint,
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  leftTitle: {
-    alignSelf: "stretch",
-    textAlign: "left",
-    marginLeft: 20,
-  },
-  content: {
-    paddingLeft: 50,
-    paddingRight: 50,
-    textAlign: "center",
-    fontSize: AppStyles.fontSize.content,
-    color: AppStyles.color.text,
-  },
-  loginContainer: {
-    width: AppStyles.buttonWidth.main,
-    backgroundColor: AppStyles.color.tint,
-    borderRadius: AppStyles.borderRadius.main,
-    padding: 10,
-    marginTop: 30,
-  },
-  loginText: {
-    color: AppStyles.color.white,
-  },
-  placeholder: {
-    fontFamily: AppStyles.fontName.text,
-    color: "red",
-  },
-  InputContainer: {
-    width: AppStyles.textInputWidth.main,
-    marginTop: 30,
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: AppStyles.color.grey,
-    borderRadius: AppStyles.borderRadius.main,
-  },
-  body: {
-    height: 42,
-    paddingLeft: 20,
-    paddingRight: 20,
-    color: AppStyles.color.text,
+    color: theme.colors.primary,
   },
 });
 
-export default LoginActivity;
+export default memo(LoginActivity);
