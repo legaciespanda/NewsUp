@@ -2,6 +2,7 @@ import 'react-native-gesture-handler';
 // Import React and Component
 import React, { useState, useEffect } from "react";
 import { Provider as PaperProvider } from 'react-native-paper';
+import { theme } from "./src/core/Theme"
 import { name as appName } from './app.json';
 import {
   AppRegistry,
@@ -82,7 +83,7 @@ const App = () => {
   }
 
   return connectStatus ? (
-    <PaperProvider>
+    <PaperProvider theme={theme}>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SplashScreen">
         {/* SplashScreen which will come once for 5 Seconds */}
@@ -112,7 +113,7 @@ const App = () => {
       </NavigationContainer>
     </PaperProvider>
   ) : (
-      <PaperProvider>
+      <PaperProvider theme={theme}>
         <NoInternetActivity onCheck={checkConnected} />
       </PaperProvider>
     );
