@@ -62,7 +62,6 @@ const Auth = () => {
 
 const App = () => {
 
-  
   const [connectStatus, setConnectStatus] = useState(false);
   
   //check for internet connection and set connection status
@@ -167,7 +166,5 @@ const exitApps = () => {
     { cancelable: false }
   );
 };
-
 export default App;
-
 AppRegistry.registerComponent(appName, () => App);
