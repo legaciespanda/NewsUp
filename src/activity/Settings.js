@@ -1,11 +1,30 @@
 import * as React from "react";
-import {View, SafeAreaView, Alert, Platform, Linking, ScrollView, Text} from "react-native";
+import {
+  View,
+  SafeAreaView,
+  Alert,
+  Platform,
+  Linking,
+  Share,
+} from "react-native";
 import { List } from "react-native-paper";
 import { AppStyles } from "../config/AppStyles";
 //import RNStyledDialogs from "react-native-styled-dialogs";
 import Communications from "react-native-communications";
 
 const SettingsActivity = ({ navigation }) => {
+
+  const shareWithFriends = () => {
+    const inputValue = "Hello";
+    //Here is the Share API
+    Share.share({
+      message: inputValue.toString(),
+    })
+      //after successful share return result
+      .then((result) => console.log(result))
+      //If any thing goes wrong it comes here
+      .catch((errorMsg) => console.log(errorMsg));
+  };
   
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -45,15 +64,13 @@ const SettingsActivity = ({ navigation }) => {
           )}
           onPress={() =>
             Communications.email(
-              [
-                'aboutreact11@gmail.com',
-                'hello@aboutreact.com'
-              ],
+              ["aboutreact11@gmail.com", "hello@aboutreact.com"],
               null,
               null,
-              'Demo Subject',
-              'Demo Content for the mail',
-            )}
+              "Demo Subject",
+              "Demo Content for the mail"
+            )
+          }
         />
         <List.Item
           title="Privacy Policy"
@@ -94,6 +111,7 @@ const SettingsActivity = ({ navigation }) => {
               icon="share-variant"
             />
           )}
+          onPress={() => shareWithFriends()}
         />
         <List.Item
           title="Version"
