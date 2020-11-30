@@ -103,7 +103,7 @@ const RegisterActivity = ({ navigation }) => {
 
       <View style={styles.row}>
         <Text style={styles.label}>Already have a DigiWigi account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
+        <TouchableOpacity onPress={() => navigation.navigate("LoginActivity")}>
           <Text style={styles.link}>Login</Text>
         </TouchableOpacity>
       </View>

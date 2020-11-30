@@ -27,8 +27,8 @@ import NavigationComponent from './src/components/Navigation';
 import { AppStyles } from "./src/config/AppStyles";
 
 
-import { checkConnected } from "./src/config/InternetDetect";
-import NoInternetActivity from "./src/activity/NoInternetActivity";
+// import { checkConnected } from "./src/config/InternetDetect";
+// import NoInternetActivity from "./src/activity/NoInternetActivity";
 
 const Stack = createStackNavigator();
 
@@ -62,28 +62,23 @@ const Auth = () => {
 
 const App = () => {
 
-  const [connectStatus, setConnectStatus] = useState(false);
+  // const [connectStatus, setConnectStatus] = useState(false);
   
-  //check for internet connection and set connection status
-    checkConnected().then(checkConnected=>{
-    setConnectStatus(checkConnected)
-  });
+  // //check for internet connection and set connection status
+  //   checkConnected().then(checkConnected=>{
+  //   setConnectStatus(checkConnected)
+  // });
 
   componentDidMount = () =>{
     //handling back button press
     BackHandler.addEventListener("hardwareBackPress", exitApps);
-
-    //check for internet connection and set connection status
-  //   checkConnected().then(checkConnected=>{
-  //   setConnectStatus(checkConnected)
-  // });
   };
 
     componentWillUnmount = () => {
     BackHandler.removeEventListener("hardwareBackPress", exitApps);
   }
 
-  return connectStatus ? (
+  return (
     <PaperProvider theme={theme}>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SplashScreen">
@@ -113,10 +108,6 @@ const App = () => {
       </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
-  ) : (
-      <PaperProvider theme={theme}>
-        <NoInternetActivity onCheck={checkConnected} />
-      </PaperProvider>
     );
 
   // return (
@@ -161,10 +152,11 @@ const exitApps = () => {
         onPress: () => console.log("Cancel Pressed"),
         style: "cancel",
       },
-      { text: "Yes", onPress: () => BackHandler.exitApp() },
+      { text: "Exit", onPress: () => BackHandler.exitApp() },
     ],
     { cancelable: false }
   );
 };
 export default App;
+
 AppRegistry.registerComponent(appName, () => App);

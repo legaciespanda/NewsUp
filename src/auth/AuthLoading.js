@@ -1,15 +1,15 @@
 import React, { memo } from "react";
 import { ActivityIndicator } from "react-native";
-import "@react-native-firebase/auth";
-//import auth from "@react-native-firebase/auth";
+import * as firebase from "firebase/app";
+import "firebase/auth";
 import Background from "../components/Background";
 import { theme } from "../core/theme";
 import { FIREBASE_CONFIG } from "../core/config";
-import firebase from "@react-native-firebase/app";
-import { AsyncStorage } from "react-native";
 
 // Initialize Firebase
-firebase.initializeApp(FIREBASE_CONFIG);
+if (!firebase.apps.length) {
+    await firebase.initializeApp(FIREBASE_CONFIG);
+}
 
 const AuthLoadingScreen = ({ navigation }) => {
     firebase.auth().onAuthStateChanged(user => {

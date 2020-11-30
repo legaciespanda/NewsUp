@@ -1,11 +1,11 @@
 // Replace with your own firebase config!
 export const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyBDsdN3XWM5D2-c_ti5j44GrhMnBHNmSF0",
-  authDomain: "react-native-market-2861b.firebaseapp.com",
-  databaseURL: "https://react-native-market-2861b.firebaseio.com",
-  projectId: "react-native-market-2861b",
-  storageBucket: "react-native-market-2861b.appspot.com",
-  messagingSenderId: "878215484396",
-  appId: "1:878215484396:web:c36074bccb0b5693b0a6c9",
-  measurementId: "G-317PLP59P2"
+  apiKey: "AIzaSyCiqZxXHHsXVp5FAfjN3jPjtBO3wJAOMr8",
+  authDomain: "digiwigi-aaf1e.firebaseapp.com",
+  databaseURL: "https://digiwigi-aaf1e.firebaseio.com",
+  projectId: "digiwigi-aaf1e",
+  storageBucket: "digiwigi-aaf1e.appspot.com",
+  messagingSenderId: "332967376374",
+  appId: "1:332967376374:web:4f8f5464ac5563bc5ac3d7",
+  //measurementId: "G-FK68WFZH26"
 };

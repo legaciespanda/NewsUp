@@ -6,16 +6,20 @@ import {
   Image,
   Text,
   Linking,
-  Alert
+  Alert,
+  Share,
+  Platform
 } from "react-native";
+//import Share from "react-native-share";
 
-
+//import * as Sharing from "expo-sharing";
 
 import {
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
 } from "@react-navigation/drawer";
+
 
 //import AsyncStorage from '@react-native-community/async-storage';
 
@@ -39,21 +43,30 @@ const CustomSidebarMenu = (props) => {
         <DrawerItemList {...props} />
         <DrawerItem
           label="User Profile"
-          onPress={() => Linking.openURL("https://aboutreact.com/")}
+          onPress={() =>
+            Platform.OS === "android"
+              ? Linking.openURL("https://google.com/")
+              : Linking.openURL("https://aboutreact.com/")
+          }
         />
-        <DrawerItem
-          label="Contact Us"
-          onPress={() => Linking.openURL("https://aboutreact.com/")}
-        />
+        <DrawerItem label="Contact Us" />
         <DrawerItem
           label="Invite Friends"
-          onPress={() => Linking.openURL("https://aboutreact.com/")}
+          onPress={() =>
+            Linking.openURL(
+              "https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en"
+            )
+          }
         />
         <View style={styles.customItem}>
           <Text
-            onPress={() => {
-              Linking.openURL("https://aboutreact.com/");
-            }}
+            onPress={() =>
+              Platform.OS === "android"
+                ? Linking.openURL(
+                    "https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en"
+                  )
+                : Linking.openURL("applinks:share.myapp.com")
+            }
           >
             Rate Our App
           </Text>
@@ -65,36 +78,60 @@ const CustomSidebarMenu = (props) => {
         <DrawerItem
           label="Logout"
           onPress={() =>
-                      Alert.alert(
-              'Logout',
-              'Are you sure? You want to logout?',
+            Alert.alert(
+              "Logout",
+              "Are you sure? You want to logout?",
               [
                 {
-                  text: 'Cancel',
+                  text: "Cancel",
                   onPress: () => {
                     return null;
                   },
                 },
                 {
-                  text: 'Confirm',
+                  text: "Confirm",
                   onPress: () => {
                     //AsyncStorage.clear();
-                    props.navigation.replace('Auth');
+                    props.navigation.replace("Auth");
                     return null;
                   },
                 },
               ],
-              {cancelable: false},
+              { cancelable: false }
             )
           }
         />
       </DrawerContentScrollView>
       <Text style={{ fontSize: 16, textAlign: "center", color: "grey" }}>
-        Rakesh News App - Version 0.1
+        DigiWigi- Version 0.1
       </Text>
     </SafeAreaView>
   );
 };
+
+// const shareApp =async () => {
+//   if (await Sharing.isAvailableAsync()) {
+//     const url = "https://www.ggogle.com"
+//     const dialogTitle = "Hello";
+//     const options = await Sharing.shareAsync(url, dialogTitle);
+//   }
+// }
+
+const share2 = () => {
+    const options = {
+    title:"Kung",
+    subject: "title",
+    message: "Hello",
+  }
+
+    Share.open(options)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+}
 
 const styles = StyleSheet.create({
   sideMenuProfileIcon: {

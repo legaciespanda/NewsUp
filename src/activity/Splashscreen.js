@@ -1,25 +1,51 @@
 // Import React and Component
 import React, {useState, useEffect} from 'react';
-import { ActivityIndicator, View, StyleSheet, Image,Text } from 'react-native';
+import { ActivityIndicator, View, StyleSheet, Image, Text, Alert } from 'react-native';
 import { AppStyles } from "../config/AppStyles";
 
 import AsyncStorage from '@react-native-community/async-storage';
+import { checkConnected } from "../../src/config/InternetDetect";
+//import NoInternetActivity from "../../src/activity/NoInternetActivity";
 
 const SplashScreen = ({navigation}) => {
   //State for ActivityIndicator animation
   const [animating, setAnimating] = useState(true);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setAnimating(false);
-      //Check if user_id is set or not
-      //If not then send for Authentication
-      //else send to Home Screen
-      AsyncStorage.getItem('user_id').then((value) =>
-        navigation.replace(value === null ? 'Auth' : 'NavigationComponent'),
-      );
-    }, 5000);
-  }, []);
+
+    componentDidMount = () => {
+    };
+
+  //check for internet connection and set connection status
+    checkConnected().then(checkConnected=>{
+      if (checkConnected) {
+        setTimeout(() => {
+          setAnimating(false);
+          //Check if user_id is set or not
+          //If not then send for Authentication
+          //else send to Home Screen
+          AsyncStorage.getItem("user_id").then((value) =>
+            navigation.replace(
+              value === null ? "NavigationComponent" : "NavigationComponent"
+            )
+          );
+        }, 5000);
+      }
+    });
+  
+  
+            // useEffect(() => {
+            //   setTimeout(() => {
+            //     setAnimating(false);
+            //     //Check if user_id is set or not
+            //     //If not then send for Authentication
+            //     //else send to Home Screen
+            //     AsyncStorage.getItem("user_id").then((value) =>
+            //       navigation.replace(
+            //         value === null ? "Auth" : "NavigationComponent"
+            //       )
+            //     );
+            //   }, 5000);
+            // }, []);
 
   return (
     <View style={styles.container}>

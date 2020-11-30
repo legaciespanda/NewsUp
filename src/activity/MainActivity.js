@@ -2,40 +2,40 @@
 // https://aboutreact.com/custom-navigation-drawer-sidebar-with-image-and-icon-in-menu-options/
 
 import * as React from "react";
-import { Button, View, Text, SafeAreaView } from "react-native";
+import {SafeAreaView } from "react-native";
+import { BottomNavigation, Text } from "react-native-paper";
+
+import SettingsActivity from "../activity/Settings";
+
+  const HomeRoute = () => <Text>Music</Text>;
+
+  const LatestRoute = () => <SettingsActivity/>;
+
+  const SettingsRoute = () => <SettingsActivity/>;
 
 const SecondActivity = ({ navigation }) => {
+
+  
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: "home", title: "Home", icon: "shield-home" },
+    { key: "latest", title: "Latest News", icon: "newspaper" },
+    { key: "settings", title: "Settings", icon: "cogs" },
+  ]);
+
+  const renderScene = BottomNavigation.SceneMap({
+    home: HomeRoute,
+    latest: LatestRoute,
+    settings: SettingsRoute,
+  });
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1, padding: 16 }}>
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 25,
-              textAlign: "center",
-              marginBottom: 16,
-            }}
-          >
-            No Internet Access!
-          </Text>
-          <Button
-            title="Refresh"
-            onPress={() => navigation.navigate("Settings")}
-          />
-        </View>
-        <Text style={{ fontSize: 18, textAlign: "center", color: "grey" }}>
-          Under Development by Megtrix
-        </Text>
-        <Text style={{ fontSize: 16, textAlign: "center", color: "grey" }}>
-          www.megtrix.com
-        </Text>
-      </View>
+      <BottomNavigation
+        navigationState={{ index, routes }}
+        onIndexChange={setIndex}
+        renderScene={renderScene}
+      />
     </SafeAreaView>
   );
 };

@@ -1,43 +1,170 @@
-// Custom Navigation Drawer / Sidebar with Image and Icon in Menu Options
-// https://aboutreact.com/custom-navigation-drawer-sidebar-with-image-and-icon-in-menu-options/
-
 import * as React from "react";
-import { Button, View, Text, SafeAreaView } from "react-native";
+import {View, SafeAreaView, Alert, Platform, Linking, ScrollView } from "react-native";
+import { List } from "react-native-paper";
+import { AppStyles } from "../config/AppStyles";
+import RNStyledDialogs from "react-native-styled-dialogs";
 
 const SettingsActivity = ({ navigation }) => {
+  
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1, padding: 16 }}>
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
+        <List.Item
+          title="About DigiWigi"
+          description="Know more about DigiWigi"
+          left={(props) => (
+            <List.Icon
+              {...props}
+              color={AppStyles.color.main}
+              icon="newspaper"
+            />
+          )}
+          onPress={() =>
+            RNStyledDialogs.Show({
+              title: "Awesome!",
+              description:
+                "Glad to you like RNStyledDialogs! If you are up for it, we would like to appreciate you receiving us.",
+              positiveText: "Go",
+              neutralText: "Close",
+              negativeText: "Later",
+              onPositive: () => {},
+              onNeutral: () => {},
+              onNegative: () => {},
+              onCancellable: () => {},
+            })
+          }
+        />
+
+        <List.Item
+          title="Contact DigiWigi"
+          description="Contact us if any issues,complains, etc"
+          left={(props) => (
+            <List.Icon {...props} color={AppStyles.color.main} icon="phone" />
+          )}
+        />
+        <List.Item
+          title="Privacy Policy"
+          description="Please read our Privacy Policy"
+          left={(props) => (
+            <List.Icon
+              {...props}
+              color={AppStyles.color.main}
+              icon="book-open-variant"
+            />
+          )}
+        />
+        <List.Item
+          title="Rate"
+          description="To help us improve, Pls Rate our app!"
+          left={(props) => (
+            <List.Icon {...props} color={AppStyles.color.main} icon="star" />
+          )}
+          onPress={() => {
+            if (Platform.OS === "android") {
+              Linking.openURL(
+                "https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en"
+              );
+            } else if (Platform.OS === "ios") {
+              Linking.openURL(
+                "https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en"
+              );
+            }
           }}
-        >
-          <Text
-            style={{
-              fontSize: 25,
-              textAlign: "center",
-              marginBottom: 16,
-            }}
-          >
-            This is the First Page under First Page Option
-          </Text>
-          <Button
-            onPress={() => navigation.navigate("SecondActivity")}
-            title="Second Activity"
-          />
-        </View>
-        <Text style={{ fontSize: 18, textAlign: "center", color: "grey" }}>
-          Custom React Navigate Drawer
-        </Text>
-        <Text style={{ fontSize: 16, textAlign: "center", color: "grey" }}>
-          www.aboutreact.com
-        </Text>
+        />
+        <List.Item
+          title="Invite Friends"
+          description="Share DigiWigi with friends"
+          left={(props) => (
+            <List.Icon
+              {...props}
+              color={AppStyles.color.main}
+              icon="share-variant"
+            />
+          )}
+        />
+        <List.Item
+          title="Version"
+          description="DigiWigi Current Version"
+          titleNumberOfLines={3}
+          left={(props) => (
+            <List.Icon
+              {...props}
+              color={AppStyles.color.main}
+              icon="alert-circle"
+            />
+          )}
+          onPress={() =>
+            Alert.alert(
+              "DigiWigi Current Version",
+              "Version 0.1",
+              [
+                {
+                  text: "Ok",
+                  onPress: () => {
+                    return null;
+                  },
+                },
+              ],
+              { cancelable: false }
+            )
+          }
+        />
+        <List.Item
+          title="App Update"
+          description="Check for latest version of DigiWigi"
+          left={(props) => (
+            <List.Icon
+              {...props}
+              color={AppStyles.color.main}
+              icon="cellphone-arrow-down"
+            />
+          )}
+          onPress={() => {
+            if (Platform.OS === "android") {
+              Linking.openURL(
+                "https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en"
+              );
+            } else if (Platform.OS === "ios") {
+              Linking.openURL(
+                "https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en"
+              );
+            }
+          }}
+        />
+        <List.Item
+          title="Logout"
+          left={(props) => (
+            <List.Icon {...props} color={AppStyles.color.main} icon="logout" />
+          )}
+          onPress={() =>
+            Alert.alert(
+              "Logout",
+              "Are you sure? You want to logout?",
+              [
+                {
+                  text: "Cancel",
+                  onPress: () => {
+                    return null;
+                  },
+                },
+                {
+                  text: "Confirm",
+                  onPress: () => {
+                    //AsyncStorage.clear();
+                    props.navigation.replace("Auth");
+                    return null;
+                  },
+                },
+              ],
+              { cancelable: false }
+            )
+          }
+        />
       </View>
     </SafeAreaView>
   );
 };
 
 export default SettingsActivity;
+
+

@@ -76,7 +76,7 @@ function SettingsActivityStack({ navigation }) {
         name="SettingsActivity"
         component={SettingsActivity}
         options={{
-          title: "Settings", //Set Header Title
+          title: "Settings - DigiWigi", //Set Header Title
           headerLeft: () => (
             //<NavigationDrawerStructure navigationProps={navigation} />
             <NavigationDrawerHeader navigationProps={navigation} />
@@ -116,7 +116,7 @@ function MainActivityStack({ navigation }) {
         name="MainActivity"
         component={MainActivity}
         options={{
-          title: "Home - Rakesh News", //Set Header Title
+          title: "Home - DigiWigi", //Set Header Title
         }}
       />
     </Stack.Navigator>
@@ -125,10 +125,9 @@ function MainActivityStack({ navigation }) {
 
 function NavigationComponent() {
   return (
-    <NavigationContainer>
       <Drawer.Navigator
         drawerContentOptions={{
-          activeTintColor: AppStyles.main.activeTintColor,
+          activeTintColor: AppStyles.color.main.activeTintColor,
           itemStyle: { marginVertical: 5 },
         }}
         drawerContent={(props) => <CustomSidebarMenu {...props} />}
@@ -151,7 +150,6 @@ function NavigationComponent() {
           component={SettingsActivityStack}
         />
       </Drawer.Navigator>
-    </NavigationContainer>
   );
 }
 
