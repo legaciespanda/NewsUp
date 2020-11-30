@@ -1,8 +1,9 @@
 import * as React from "react";
-import {View, SafeAreaView, Alert, Platform, Linking, ScrollView } from "react-native";
+import {View, SafeAreaView, Alert, Platform, Linking, ScrollView, Text} from "react-native";
 import { List } from "react-native-paper";
 import { AppStyles } from "../config/AppStyles";
-import RNStyledDialogs from "react-native-styled-dialogs";
+//import RNStyledDialogs from "react-native-styled-dialogs";
+import Communications from "react-native-communications";
 
 const SettingsActivity = ({ navigation }) => {
   
@@ -20,18 +21,19 @@ const SettingsActivity = ({ navigation }) => {
             />
           )}
           onPress={() =>
-            RNStyledDialogs.Show({
-              title: "Awesome!",
-              description:
-                "Glad to you like RNStyledDialogs! If you are up for it, we would like to appreciate you receiving us.",
-              positiveText: "Go",
-              neutralText: "Close",
-              negativeText: "Later",
-              onPositive: () => {},
-              onNeutral: () => {},
-              onNegative: () => {},
-              onCancellable: () => {},
-            })
+            // RNStyledDialogs.Show({
+            //   title: "Awesome!",
+            //   description:
+            //     "Glad to you like RNStyledDialogs! If you are up for it, we would like to appreciate you receiving us.",
+            //   positiveText: "Go",
+            //   neutralText: "Close",
+            //   negativeText: "Later",
+            //   onPositive: () => {},
+            //   onNeutral: () => {},
+            //   onNegative: () => {},
+            //   onCancellable: () => {},
+            // })
+            {}
           }
         />
 
@@ -39,8 +41,19 @@ const SettingsActivity = ({ navigation }) => {
           title="Contact DigiWigi"
           description="Contact us if any issues,complains, etc"
           left={(props) => (
-            <List.Icon {...props} color={AppStyles.color.main} icon="phone" />
+            <List.Icon {...props} color={AppStyles.color.main} icon="mail" />
           )}
+          onPress={() =>
+            Communications.email(
+              [
+                'aboutreact11@gmail.com',
+                'hello@aboutreact.com'
+              ],
+              null,
+              null,
+              'Demo Subject',
+              'Demo Content for the mail',
+            )}
         />
         <List.Item
           title="Privacy Policy"
