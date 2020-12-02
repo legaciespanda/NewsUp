@@ -9,16 +9,22 @@ import {
 } from "react-native";
 import { List } from "react-native-paper";
 import { AppStyles } from "../config/AppStyles";
-//import RNStyledDialogs from "react-native-styled-dialogs";
+import RNStyledDialogs from "react-native-styled-dialogs";
 import Communications from "react-native-communications";
 
 const SettingsActivity = ({ navigation }) => {
 
   const shareWithFriends = () => {
-    const inputValue = "Hello";
+    const inputValue =
+      "Hello friends! Download DigiWigi and install to start getting latest news";
+    const titleVal = "DigiWigi";
+    const urlVal = ""
+
     //Here is the Share API
     Share.share({
+      title: titleVal.toString(),
       message: inputValue.toString(),
+      url:urlVal,
     })
       //after successful share return result
       .then((result) => console.log(result))
@@ -40,19 +46,18 @@ const SettingsActivity = ({ navigation }) => {
             />
           )}
           onPress={() =>
-            // RNStyledDialogs.Show({
-            //   title: "Awesome!",
-            //   description:
-            //     "Glad to you like RNStyledDialogs! If you are up for it, we would like to appreciate you receiving us.",
-            //   positiveText: "Go",
-            //   neutralText: "Close",
-            //   negativeText: "Later",
-            //   onPositive: () => {},
-            //   onNeutral: () => {},
-            //   onNegative: () => {},
-            //   onCancellable: () => {},
-            // })
-            {}
+            RNStyledDialogs.Show({
+              title: "Awesome!",
+              description:
+                "Glad to you like RNStyledDialogs! If you are up for it, we would like to appreciate you receiving us.",
+              positiveText: "Go",
+              neutralText: "Close",
+              negativeText: "Later",
+              onPositive: () => { },
+              onNeutral: () => { },
+              onNegative: () => { },
+              onCancellable: () => { },
+            })
           }
         />
 
