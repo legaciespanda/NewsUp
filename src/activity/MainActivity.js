@@ -6,10 +6,11 @@ import {SafeAreaView } from "react-native";
 import { BottomNavigation, Text } from "react-native-paper";
 
 import SettingsActivity from "../activity/Settings";
+import LatestNewsActivity from "../activity/LatestNewsActivity";
 
   const HomeRoute = () => <Text>Music</Text>;
 
-  const LatestRoute = () => <SettingsActivity/>;
+  const LatestRoute = () => <LatestNewsActivity />;
 
   const SettingsRoute = () => <SettingsActivity/>;
 
