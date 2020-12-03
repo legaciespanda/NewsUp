@@ -41,4 +41,6 @@ const SecondActivity = ({ navigation }) => {
   );
 };
 
+
+
 export default SecondActivity;
