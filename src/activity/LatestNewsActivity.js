@@ -6,9 +6,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  Alert
+  Alert,
+  Button,
 } from "react-native";
-import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
+import { Avatar, Card, Title, Paragraph } from "react-native-paper";
 import CardStack from "react-native-card-stack-swiper";
 import axios from "axios";
 import { latestNews, ApiKey } from "../api/News"
@@ -58,14 +59,22 @@ const LatestActivity = ({ navigation }) => {
             this.swiper = swiper;
           }}
           renderNoMoreCards={() => (
-            <Text style={{ fontWeight: "700", fontSize: 18, color: "gray" }}>
-              No more News :(
-            </Text>
+            <View>
+              <Text style={{ fontWeight: "700", fontSize: 18, color: "gray" }}>
+                No more News :(
+              </Text>
+              <Button onPress={() => reoloadNews} title="Press Me">
+                Press Me
+              </Button>
+              {/* <Button title="Reload" onPress={() => reoloadNews} /> */}
+            </View>
           )}
           onSwiped={() => getDataUsingSimpleGetCall}
           onSwipedLeft={() => {}}
-          disableRightSwipe={true}
+          disableRightSwipe={false}
+          disableLefttSwipe={true}
           disableBottomSwipe={true}
+          disableTopSwipe={true}
         >
           {getLatestNews.map(ItemView)}
         </CardStack>
@@ -97,7 +106,9 @@ const LatestActivity = ({ navigation }) => {
     );
   };
 
-
+const reoloadNews = () => {
+    forceUpdate();
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
