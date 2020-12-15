@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer, useRef } from "react";
 import {
   View,
   Text,
@@ -7,108 +7,151 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  Button,
+  ActivityIndicator,
+  AsyncStorage
 } from "react-native";
-import { Avatar, Card, Title, Paragraph } from "react-native-paper";
-import CardStack from "react-native-card-stack-swiper";
+//importing from react native paper lib
+import {
+  Avatar,
+  Title,
+  Paragraph,
+  Button,
+} from "react-native-paper";
+
+import {
+  Card,
+  CardTitle,
+  CardContent,
+  CardAction,
+  CardButton,
+  CardImage,
+} from "react-native-material-cards";
+
+//import CardStack from "react-native-card-stack-swiper";
+import Swiper from "react-native-deck-swiper";
+
+import Cardz from "../ui-component/Card"
+
 import axios from "axios";
 import { latestNews, ApiKey } from "../api/News"
+import { AppStyles } from "../../src/config/AppStyles";
+
+
+const initialState = "";
 
 const LatestActivity = ({ navigation }) => {
-    const [getLatestNews, setLatestNews] = useState([]);
-     useEffect(() => {
-         getDataUsingAsyncAwaitGetCall();
-     },[]);
+    const useSwiper = useRef(null).current;
 
+  const [currentCardIndex, setCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [cardsState, updateState] = useState({
+    news: [],
+    swipedAllCards: false,
+    swipeDirection: "",
+    cardIndex: 0,
+    pageNumber: 1,
+  });
+const [getLatestNews, setLatestNews] = useState([]);
     
-      const getDataUsingSimpleGetCall = () => {
-        axios
-          .get(latestNews + ApiKey)
-          .then(function (response) {
-            // handle success
-            setLatestNews(JSON.stringify(response.data));
-            console.log(getLatestNews);
-          })
-          .catch(function (error) {
-            // handle error
-            alert("APi Called Error" + error.message);
-          })
-          .finally(function () {
-            // always executed
-            alert("Finally called");
-          });
-      };
 
-      const getDataUsingAsyncAwaitGetCall = async () => {
+
+    //when the component is fukky loaded/mounted
+    //fetch news from digiwigi after 1 milisecends
+    useEffect(() => {
+      getDataUsingAsyncAwaitGetCall();
+    }, []);
+
+
+      //asynchronous get request call to fetech latest news
+    const getDataUsingAsyncAwaitGetCall = async () => {
+
+        //show loading
+        setLoading(true);
+        setTimeout(async () => {
+          //hide loading after the data has been fetched
+        setLoading(false);
         try {
           const response = await axios.get(latestNews+ApiKey);
-            setLatestNews(response.data);
+        //   const result = Object.entries(response.data).map(([key, val]) => ({
+        //     [key]: val,
+        //   }));
+          setLatestNews(JSON.stringify(response.data));
+                    // updateState({
+                    //   ...cardsState,
+                    //   cards: [...cardsState.news, ...response.data],
+                    // });
+                    setLoading(false);
             console.log(getLatestNews);
         } catch (error) {
           // handle error
           alert(error.message);
           }
+        }, 5000);
     };
     
-  return (
+    
+  return loading ? (
+    <ActivityIndicator
+      animating={loading}
+      color={AppStyles.color.main}
+      size="large"
+      style={styles.activityIndicator}
+    />
+  ) : (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1, padding: 16 }}>
-        <CardStack
-          style={styles.content}
-          ref={(swiper) => {
-            this.swiper = swiper;
+        <Swiper
+          cards={getLatestNews}
+                      renderCard={(card) => {
+            //   <Cardz style={styles.card8} card={card} />
+            return (
+              <Card style={styles.card8}>
+                <CardImage
+                  style={{
+                    width: 350,
+                    height: 300,
+                  }}
+                  title="Lighthouse"
+                  source={{
+                    uri:
+                      "https://blog.trustlancers.com/public/news_image/" +
+                      card.featured_image,
+                  }}
+                />
+                <CardTitle
+                  subtitleAbove={true}
+                  title={card.title}
+                  subtitle={card.title}
+                  //AsyncStorage.setItem("@Store:currentNewsUrl", item.news_url)
+                />
+
+                <CardContent text={card.content} />
+                <CardAction separator={true} inColumn={false}>
+                  <CardButton onPress={() => {}} title={card.title} />
+                </CardAction>
+              </Card>
+            );
           }}
-          renderNoMoreCards={() => (
-            <View>
-              <Text style={{ fontWeight: "700", fontSize: 18, color: "gray" }}>
-                No more News :(
-              </Text>
-              <Button onPress={() => reoloadNews} title="Press Me">
-                Press Me
-              </Button>
-              {/* <Button title="Reload" onPress={() => reoloadNews} /> */}
-            </View>
-          )}
-          onSwiped={() => getDataUsingSimpleGetCall}
-          onSwipedLeft={() => {}}
-          disableRightSwipe={false}
-          disableLefttSwipe={true}
-          disableBottomSwipe={true}
-          disableTopSwipe={true}
-        >
-          {getLatestNews.map(ItemView)}
-        </CardStack>
+          onSwiped={(cardIndex) => {
+            console.log(cardIndex);
+          }}
+          onSwipedAll={() => {
+            console.log("onSwipedAll");
+          }}
+          onSwipedTop={() => {
+            console.log(getLatestNews);
+          }}
+          cardIndex={0}
+          backgroundColor="white"
+          stackSize={2}
+          infinite
+          showSecondCard
+        ></Swiper>
       </View>
     </SafeAreaView>
   );
 };
 
-  const ItemView = (item, key) => {
-    return (
-      <Card style={styles.card8} key={key}>
-        <Card.Title title="Card Title" subtitle="Card Subtitle" />
-        <Card.Content>
-          <Title>{item.title}</Title>
-          <Paragraph>{item.content}</Paragraph>
-        </Card.Content>
-        <Card.Cover
-          source={{
-            uri:
-              "https://blog.trustlancers.com/public/news_image/" +
-              item.featured_image,
-          }}
-        />
-        <Card.Actions>
-          <Button>Cancel</Button>
-          <Button>Ok</Button>
-        </Card.Actions>
-      </Card>
-    );
-  };
-
-const reoloadNews = () => {
-    forceUpdate();
-}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -121,6 +164,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   card: {
+    borderRadius: 4,
     width: 320,
     height: 470,
     backgroundColor: "#FE474C",
@@ -134,8 +178,6 @@ const styles = StyleSheet.create({
   },
 
   card8: {
-    width: 330,
-    height: 550,
     borderRadius: 5,
     shadowColor: "rgba(0,0,0,0.5)",
     shadowOffset: {
@@ -203,6 +245,10 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     borderWidth: 6,
     borderColor: "#fd267d",
+  },
+  activityIndicator: {
+    alignItems: "center",
+    height: 50,
   },
 });
 export default LatestActivity;

@@ -1,18 +1,24 @@
-// Custom Navigation Drawer / Sidebar with Image and Icon in Menu Options
-// https://aboutreact.com/custom-navigation-drawer-sidebar-with-image-and-icon-in-menu-options/
-
 import * as React from "react";
-import {SafeAreaView } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+
 import { BottomNavigation, Text } from "react-native-paper";
 
 import SettingsActivity from "../activity/Settings";
 import LatestNewsActivity from "../activity/LatestNewsActivity";
+import HomeActivity from "../activity/HomeActivity";
 
-  const HomeRoute = () => <Text>Music</Text>;
+  const HomeRoute = () => <HomeActivity/>;
 
   const LatestRoute = () => <LatestNewsActivity />;
 
-  const SettingsRoute = () => <SettingsActivity/>;
+  const SettingsRoute = () => <SettingsActivity />;
+  
 
 const SecondActivity = ({ navigation }) => {
 
@@ -20,7 +26,7 @@ const SecondActivity = ({ navigation }) => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: "home", title: "Home", icon: "shield-home" },
-    { key: "latest", title: "Latest News", icon: "newspaper" },
+    { key: "latest", title: "Just In", icon: "newspaper" },
     { key: "settings", title: "Settings", icon: "cogs" },
   ]);
 
@@ -32,6 +38,8 @@ const SecondActivity = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+
+      {/* Bottom navigation */}
       <BottomNavigation
         navigationState={{ index, routes }}
         onIndexChange={setIndex}
@@ -40,7 +48,5 @@ const SecondActivity = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
-
 
 export default SecondActivity;
