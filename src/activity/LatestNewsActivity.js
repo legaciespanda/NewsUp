@@ -36,11 +36,14 @@ import axios from "axios";
 import { latestNews, ApiKey } from "../api/News"
 import { AppStyles } from "../../src/config/AppStyles";
 
+import { docs } from "../api/docs";
+
 
 const initialState = "";
 
 const LatestActivity = ({ navigation }) => {
     const useSwiper = useRef(null).current;
+    //const swiperRef = React.createRef();
 
   const [currentCardIndex, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -101,8 +104,14 @@ const [getLatestNews, setLatestNews] = useState([]);
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1, padding: 16 }}>
         <Swiper
+          ref={useSwiper}
           cards={getLatestNews}
-                      renderCard={(card) => {
+          cardIndex={0}
+          backgroundColor="white"
+          stackSize={2}
+          showSecondCard
+          animateCardOpacity
+          renderCard={card => {
             //   <Cardz style={styles.card8} card={card} />
             return (
               <Card style={styles.card8}>
@@ -141,11 +150,6 @@ const [getLatestNews, setLatestNews] = useState([]);
           onSwipedTop={() => {
             console.log(getLatestNews);
           }}
-          cardIndex={0}
-          backgroundColor="white"
-          stackSize={2}
-          infinite
-          showSecondCard
         ></Swiper>
       </View>
     </SafeAreaView>
