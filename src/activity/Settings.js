@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { List } from "react-native-paper";
 import { AppStyles } from "../config/AppStyles";
-import RNStyledDialogs from "react-native-styled-dialogs";
+//import RNStyledDialogs from "react-native-styled-dialogs";
 import Communications from "react-native-communications";
 
 const SettingsActivity = ({ navigation }) => {
@@ -36,6 +36,43 @@ const SettingsActivity = ({ navigation }) => {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1, padding: 16 }}>
         <List.Item
+          title="Advertise on DigiWigi"
+          description="We will help you promote your content"
+          left={(props) => (
+            <List.Icon {...props} color={AppStyles.color.main} icon="bullhorn" />
+          )}
+          onPress={() =>
+            Alert.alert(
+              "Advertise on Digi-Wigi",
+              "Are you an entrepreneur or a business tycoon and you find it difficult advertising your content?  \n\nAdvertise with DigiWigi today and we will help you promote your content and make you reach out to a wider audience",
+              [
+                {
+                  text: "Advertise",
+                  onPress: () => {
+                    //send email
+                    Communications.email(
+                      ["contact@gmail.com", "youandinews@gmail.com"],
+                      null,
+                      null,
+                      "Contact Digi-Wigi",
+                      "Please write to us and we will resond in a short while"
+                    );
+                  },
+                },
+
+                {
+                  text: "Cancel",
+                  //make a phon call
+                  onPress: () => {
+                    return null;
+                  },
+                },
+              ],
+              { cancelable: false }
+            )
+          }
+        />
+        <List.Item
           title="About DigiWigi"
           description="Know more about DigiWigi"
           left={(props) => (
@@ -46,18 +83,19 @@ const SettingsActivity = ({ navigation }) => {
             />
           )}
           onPress={() =>
-            RNStyledDialogs.Show({
-              title: "Awesome!",
-              description:
-                "Glad to you like RNStyledDialogs! If you are up for it, we would like to appreciate you receiving us.",
-              positiveText: "Go",
-              neutralText: "Close",
-              negativeText: "Later",
-              onPositive: () => { },
-              onNeutral: () => { },
-              onNegative: () => { },
-              onCancellable: () => { },
-            })
+            Alert.alert(
+              "About Digi Wigi",
+              "Version 0.1",
+              [
+                {
+                  text: "Ok",
+                  onPress: () => {
+                    return null;
+                  },
+                },
+              ],
+              { cancelable: false }
+            )
           }
         />
 
@@ -68,12 +106,33 @@ const SettingsActivity = ({ navigation }) => {
             <List.Icon {...props} color={AppStyles.color.main} icon="mail" />
           )}
           onPress={() =>
-            Communications.email(
-              ["aboutreact11@gmail.com", "hello@aboutreact.com"],
-              null,
-              null,
-              "Demo Subject",
-              "Demo Content for the mail"
+            Alert.alert(
+              "Contact Digi Wigi",
+              "Please choose your preffered method to get in contact with Digi-Wigi.",
+              [
+                {
+                  text: "Send Email",
+                  onPress: () => {
+                    //send email
+                    Communications.email(
+                      ["contact@gmail.com", "youandinews@gmail.com"],
+                      null,
+                      null,
+                      "Contact Digi-Wigi",
+                      "Please write to us and we will resond in a short while"
+                    );
+                  },
+                },
+
+                {
+                  text: "Phone Call",
+                  //make a phon call
+                  onPress: () => {
+                    Communications.phonecall("+2347012159048", true);
+                  },
+                },
+              ],
+              { cancelable: false }
             )
           }
         />
@@ -167,7 +226,8 @@ const SettingsActivity = ({ navigation }) => {
             }
           }}
         />
-        <List.Item
+
+        {/* <List.Item
           title="Logout"
           left={(props) => (
             <List.Icon {...props} color={AppStyles.color.main} icon="logout" />
@@ -195,7 +255,7 @@ const SettingsActivity = ({ navigation }) => {
               { cancelable: false }
             )
           }
-        />
+        /> */}
       </View>
     </SafeAreaView>
   );

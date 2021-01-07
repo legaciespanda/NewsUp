@@ -1,13 +1,9 @@
 import * as React from "react";
 import {
   SafeAreaView,
-  StyleSheet,
-  View,
-  Image,
-  TouchableOpacity,
 } from "react-native";
 
-import { BottomNavigation, Text } from "react-native-paper";
+import { BottomNavigation } from "react-native-paper";
 
 import SettingsActivity from "../activity/Settings";
 import LatestNewsActivity from "../activity/LatestNewsActivity";

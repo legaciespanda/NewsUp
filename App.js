@@ -3,6 +3,8 @@ import 'react-native-gesture-handler';
 import React, { useState, useEffect } from "react";
 import { Provider as PaperProvider } from 'react-native-paper';
 import { theme } from "./src/core/Theme"
+import * as Font from "expo-font";
+import { useFonts } from "@use-expo/font";
 import { name as appName } from './app.json';
 import {
   AppRegistry,
@@ -72,6 +74,8 @@ const App = () => {
   componentDidMount = () =>{
     //handling back button press
     BackHandler.addEventListener("hardwareBackPress", exitApps);
+    //_loadResourcesAsync();
+    ff();
   };
 
     componentWillUnmount = () => {
@@ -141,6 +145,29 @@ const App = () => {
   // );
 };
 
+//resource load at the time of app loading
+  const _loadResourcesAsync = async () => {
+    return Promise.all([
+      Font.loadAsync({
+        "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
+        "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+        "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+        "Roboto-Light": require("./assets/fonts/Roboto-Light.ttf"),
+        "Roboto-Black": require("./assets/fonts/Roboto-Black.ttf"),
+      })
+    ]);
+};
+  
+const ff = () => {
+  const customFonts = {
+    "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
+    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Light": require("./assets/fonts/Roboto-Light.ttf"),
+    "Roboto-Black": require("./assets/fonts/Roboto-Black.ttf"),
+  };
+  useFonts(customFonts);
+  }
 
 const exitApps = () => {
   Alert.alert(

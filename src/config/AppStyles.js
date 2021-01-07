@@ -8,14 +8,14 @@ const numColumns = 2;
 export const AppStyles = {
          color: {
            //05014a
-           deepblue: "#00008B",
-           activeTintColor: "#0021f3",
-           main: "#00008B",
-           text: "#696969",
-           title: "#464646",
-           subtitle: "#545454",
+           deepblue: "#DC143C",
+           activeTintColor: "#DC143C",
+           main: "#DC143C",
+           text: "#DC143C",
+           title: "#DC143C",
+           subtitle: "#DC143C",
            categoryTitle: "#161616",
-           tint: "#ff5a66",
+           tint: "#DC143C",
            description: "#bbbbbb",
            filterTitle: "#8a8a8a",
            starRating: "#2bdf85",
@@ -25,8 +25,8 @@ export const AppStyles = {
            grey: "grey",
            greenBlue: "#00aea8",
            placeholder: "#a0a0a0",
-           background: "#f2f2f2",
-           blue: "#3293fe",
+           background: "#DC143C",
+           blue: "#DC143C",
          },
          fontSize: {
            title: 30,
@@ -57,7 +57,7 @@ export const AppIcon = {
     marginRight: 10
   },
   style: {
-    tintColor: AppStyles.color.tint,
+    tintColor: AppStyles.color.main,
     width: 25,
     height: 25
   },

@@ -20,6 +20,17 @@ export const user = require("../../assets/icons/user_icon.png");
 export const villa = require("../../assets/icons/villa_icon.png");
 export const wind = require("../../assets/icons/wind_icon.png");
 
+
+export const latest = require("../../assets/icons/latest.png");
+export const technology = require("../../assets/icons/technology.png");
+export const marketing = require("../../assets/icons/marketing.png");
+export const advertising = require("../../assets/icons/advertising.png");
+export const digital = require("../../assets/icons/digital.jpg");
+export const business = require("../../assets/icons/business.png");
+export const sports = require("../../assets/icons/sports.png");
+export const radio = require("../../assets/icons/radio.png");
+export const startups = require("../../assets/icons/startups.png");
+
 export default {
     airplane,
     back,

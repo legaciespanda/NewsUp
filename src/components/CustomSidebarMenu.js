@@ -13,6 +13,7 @@ import {
 //import Share from "react-native-share";
 
 //import * as Sharing from "expo-sharing";
+import Communications from "react-native-communications";
 
 import {
   DrawerContentScrollView,
@@ -36,28 +37,60 @@ const CustomSidebarMenu = (props) => {
         style={styles.sideMenuProfileIcon}
       />
       <View style={styles.appname}>
-        <Text>Rakesh Blog</Text>
+        <Text>Newsuponline</Text>
       </View>
 
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
-        <DrawerItem
+
+        {/* <DrawerItem
           label="User Profile"
           onPress={() =>
             Platform.OS === "android"
               ? Linking.openURL("https://google.com/")
               : Linking.openURL("https://aboutreact.com/")
           }
+        /> */}
+
+        <DrawerItem label="Contact Us"
+          onPress={() => {
+                      Alert.alert(
+                        "Contact Digi Wigi",
+                        "Please choose your preffered method to get in contact with Digi-Wigi.",
+                        [
+                          {
+                            text: "Send Email",
+                            onPress: () => {
+                              //send email
+                              Communications.email(
+                                ["contact@gmail.com", "youandinews@gmail.com"],
+                                null,
+                                null,
+                                "Contact Digi-Wigi",
+                                "Please write to us and we will resond in a short while"
+                              );
+                            },
+                          },
+
+                          {
+                            text: "Phone Call",
+                            //make a phon call
+                            onPress: () => {
+                              Communications.phonecall("+2347012159048", true);
+                            },
+                          },
+                        ],
+                        { cancelable: true }
+                      );
+        }}
         />
-        <DrawerItem label="Contact Us" />
         <DrawerItem
           label="Invite Friends"
           onPress={() =>
-            Linking.openURL(
-              "https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en"
-            )
+            shareWithFriends()
           }
         />
+
         <View style={styles.customItem}>
           <Text
             onPress={() =>
@@ -76,11 +109,11 @@ const CustomSidebarMenu = (props) => {
           />
         </View>
         <DrawerItem
-          label="Logout"
+          label="Exit"
           onPress={() =>
             Alert.alert(
-              "Logout",
-              "Are you sure? You want to logout?",
+              "Exit DigiWigi",
+              "Are you sure? You want to exit application?",
               [
                 {
                   text: "Cancel",
@@ -89,10 +122,10 @@ const CustomSidebarMenu = (props) => {
                   },
                 },
                 {
-                  text: "Confirm",
+                  text: "Exit",
                   onPress: () => {
                     //AsyncStorage.clear();
-                    props.navigation.replace("Auth");
+                    //props.navigation.replace("Auth");
                     return null;
                   },
                 },
@@ -103,19 +136,12 @@ const CustomSidebarMenu = (props) => {
         />
       </DrawerContentScrollView>
       <Text style={{ fontSize: 16, textAlign: "center", color: "grey" }}>
-        DigiWigi- Version 0.1
+        Newsuponline- Version 0.1
       </Text>
     </SafeAreaView>
   );
 };
 
-// const shareApp =async () => {
-//   if (await Sharing.isAvailableAsync()) {
-//     const url = "https://www.ggogle.com"
-//     const dialogTitle = "Hello";
-//     const options = await Sharing.shareAsync(url, dialogTitle);
-//   }
-// }
 
 const share2 = () => {
     const options = {
@@ -133,6 +159,24 @@ const share2 = () => {
       });
 }
 
+  const shareWithFriends = () => {
+    const inputValue =
+      "Hello friends! Download DigiWigi and install to start getting latest news";
+    const titleVal = "DigiWigi";
+    const urlVal = "";
+
+    //Here is the Share API
+    Share.share({
+      title: titleVal.toString(),
+      message: inputValue.toString(),
+      url: urlVal,
+    })
+      //after successful share return result
+      .then((result) => console.log(result))
+      //If any thing goes wrong it comes here
+      .catch((errorMsg) => console.log(errorMsg));
+};
+  
 const styles = StyleSheet.create({
   sideMenuProfileIcon: {
     resizeMode: "center",
@@ -154,7 +198,7 @@ const styles = StyleSheet.create({
   appname: {
     alignItems: "center",
     fontWeight: "bold",
-      fontSize: 50,
+    fontSize: 50,
     alignSelf: "center",
   },
 });

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,12 +6,55 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+//import { AppLoading, Asset, Font, Icon } from "expo";
 import { LinearGradient } from "expo-linear-gradient";
 import { images, icons, COLORS, FONTS, SIZES } from "../home-config";
 import { Text } from "react-native-paper";
+import categoryID from "../util/categoryId";
+import Toast from "react-native-simple-toast";
+import docs from "../api/docs";
 
+
+
+//   _loadResourcesAsync = async () => {
+//     return Promise.all([
+//       Font.loadAsync({
+//         ...FONTS.body3,
+//       }),
+//     ]);
+// };
+  
+const NewsOptions = ({ icon, label, onPress }) => {
+    
+    return (
+      <TouchableOpacity
+        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        onPress={onPress}
+      >
+        <View style={[styles.shadow, { width: 120, height: 100 }]}>
+          <Image
+            style={[
+              {
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                    borderRadius: 10,
+              },
+            ]}
+            source={icon}
+            resizeMode="cover"
+          />
+        </View>
+        <Text style={{ marginTop: -10, color: COLORS.gray, ...FONTS.body3 }}>
+          {label}
+        </Text>
+      </TouchableOpacity>
+    );
+};
 //news category option item functional component
 const OptionItemz = ({ bgColor, icon, label, onPress }) => {
+ //const fonnt = Font.loadAsync({ ...FONTS.body3 });
+
   return (
     <TouchableOpacity
       style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
@@ -53,6 +96,22 @@ const OptionItemz = ({ bgColor, icon, label, onPress }) => {
 };
 
 const HomeActivity = ({ navigation }) => {
+
+    useEffect(() => {
+        showUnreadNewsNotif();
+    },[3])
+
+    //displays number of unread news to the user
+    const showUnreadNewsNotif = () => {
+        Toast.showWithGravity(
+            "Hy! You have got " +
+            `${categoryID(docs, "2").length}` +
+            " latest news today from Digi Wigi. Please navigate to the Just-In tab to start reading",
+            Toast.LONG,
+            Toast.CENTER
+        );
+    }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {/* Banner */}
@@ -64,11 +123,13 @@ const HomeActivity = ({ navigation }) => {
         }}
       >
         <Image
-          source={images.homeBanner}
+          source={{
+            uri: "https://blog.trustlancers.com/app-icons/home-banner.jpg",
+          }}
           resizeMode="cover"
           style={{
             width: "100%",
-            height: "80%",
+            height: "85%",
             borderRadius: 15,
           }}
         />
@@ -79,32 +140,35 @@ const HomeActivity = ({ navigation }) => {
         <View
           style={{
             flexDirection: "row",
-            marginTop:-20,
+            marginTop: -40,
             paddingHorizontal: SIZES.base,
           }}
         >
-          <OptionItemz
-            bgColor={["#46aeff", "#5884ff"]}
-            icon={icons.airplane}
+          <NewsOptions
+            icon={{
+              uri: "https://blog.trustlancers.com/app-icons/latest.png",
+            }}
             label="Latest"
             onPress={() => {
               console.log("Flight");
             }}
           />
-          <OptionItemz
-            bgColor={["#fddf90", "#fcda13"]}
-            icon={icons.train}
+          <NewsOptions
+            icon={{
+              uri: "https://blog.trustlancers.com/app-icons/technology.png",
+            }}
             label="Technology"
             onPress={() => {
-              console.log("Train");
+              console.log("Flight");
             }}
           />
-          <OptionItemz
-            bgColor={["#e973ad", "#da5df2"]}
-            icon={icons.bus}
+          <NewsOptions
+            icon={{
+              uri: "https://blog.trustlancers.com/app-icons/marketing.png",
+            }}
             label="Marketing"
             onPress={() => {
-              console.log("Bus");
+              console.log("Flight");
             }}
           />
         </View>
@@ -112,32 +176,37 @@ const HomeActivity = ({ navigation }) => {
         <View
           style={{
             flexDirection: "row",
-            marginTop: SIZES.radius,
+            marginTop: -5,
             paddingHorizontal: SIZES.base,
           }}
         >
-          <OptionItemz
-            bgColor={["#ffc465", "#ff9c5f"]}
-            icon={icons.bed}
+          <NewsOptions
+            icon={{
+              uri: "https://blog.trustlancers.com/app-icons/advertising.png",
+            }}
             label="Advertising"
             onPress={() => {
-              console.log("Hotel");
+              console.log("Flight");
             }}
           />
-          <OptionItemz
-            bgColor={["#7cf1fb", "#4ebefd"]}
-            icon={icons.eat}
+
+          <NewsOptions
+            icon={{
+              uri: "https://blog.trustlancers.com/app-icons/digital.png",
+            }}
             label="Digital"
             onPress={() => {
-              console.log("Eats");
+              console.log("Flight");
             }}
           />
-          <OptionItemz
-            bgColor={["#7be993", "#46caaf"]}
-            icon={icons.compass}
+
+          <NewsOptions
+            icon={{
+              uri: "https://blog.trustlancers.com/app-icons/business.png",
+            }}
             label="Business"
             onPress={() => {
-              console.log("Adventure");
+              console.log("Flight");
             }}
           />
         </View>
@@ -145,34 +214,45 @@ const HomeActivity = ({ navigation }) => {
         <View
           style={{
             flexDirection: "row",
-            marginTop: SIZES.radius,
+            marginTop: -5,
             paddingHorizontal: SIZES.base,
           }}
         >
-          <OptionItemz
-            bgColor={["#ffc465", "#ff9c5f"]}
-            icon={icons.bed}
+          <NewsOptions
+            icon={{
+              uri: "https://blog.trustlancers.com/app-icons/sports.png",
+            }}
             label="Sports"
             onPress={() => {
-              console.log("Hotel");
+              console.log("Flight");
             }}
           />
-          <OptionItemz
-            bgColor={["#7cf1fb", "#4ebefd"]}
-            icon={icons.eat}
+          <NewsOptions
+            icon={{
+              uri: "https://blog.trustlancers.com/app-icons/radio.png",
+            }}
             label="Radio"
             onPress={() => {
-              console.log("Eats");
+              console.log("Flight");
             }}
           />
-          <OptionItemz
+          <NewsOptions
+            icon={{
+              uri: "https://blog.trustlancers.com/app-icons/strp.png",
+            }}
+            label="Startups"
+            onPress={() => {
+              console.log("Flight");
+            }}
+          />
+          {/* <OptionItemz
             bgColor={["#7be993", "#46caaf"]}
             icon={icons.compass}
             label="Startups"
             onPress={() => {
               console.log("Adventure");
             }}
-          />
+          /> */}
         </View>
       </View>
     </SafeAreaView>

@@ -76,7 +76,7 @@ function SettingsActivityStack({ navigation }) {
         name="SettingsActivity"
         component={SettingsActivity}
         options={{
-          title: "Settings - DigiWigi", //Set Header Title
+          title: "Settings - Newsuponline", //Set Header Title
           headerLeft: () => (
             //<NavigationDrawerStructure navigationProps={navigation} />
             <NavigationDrawerHeader navigationProps={navigation} />
@@ -115,8 +115,9 @@ function MainActivityStack({ navigation }) {
       <Stack.Screen
         name="MainActivity"
         component={MainActivity}
+        
         options={{
-          title: "Home - DigiWigi", //Set Header Title
+          title: "Home - Newsuponline", //Set Header Title
         }}
       />
     </Stack.Navigator>
@@ -127,7 +128,7 @@ function NavigationComponent() {
   return (
       <Drawer.Navigator
         drawerContentOptions={{
-          activeTintColor: AppStyles.color.main.activeTintColor,
+          activeTintColor: AppStyles.color.main,
           itemStyle: { marginVertical: 5 },
         }}
         drawerContent={(props) => <CustomSidebarMenu {...props} />}

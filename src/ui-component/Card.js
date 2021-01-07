@@ -8,8 +8,13 @@ const Cardz = ({ card }) => (
       source={card.featured_image}
       resizeMode="cover"
     />
+
     <View style={styles.photoDescriptionContainer}>
-      <Text style={styles.text}>{`${card.title}, ${card.content}`}</Text>
+      <Text style={styles.title}>{`${card.title}`}</Text>
+      <Text style={styles.content}>{`${card.content}`}</Text>
+      <Text style={styles.details}>
+        Swipe Left to read news in details
+      </Text>
     </View>
   </View>
 );

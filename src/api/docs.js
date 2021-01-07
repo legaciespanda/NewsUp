@@ -1,82 +1,127 @@
-const docs = [
+import shuffleArray from "../util/shuffleArray";
+
+const docs = shuffleArray([
   {
     title: "Austin Wade",
-    content: 22,
+    category_id: "2",
+    content:
+      "Every day you send and receive hundreds or more emails, however, you actually do not know whether they will get your targeted customers inbox.",
     featured_image: require("../../assets/images/beach.jpeg"),
+    created_at: "2020-12-29T16:26:13.000000Z",
+    news_url: "https://www.google.com",
     key: "caseex6qfO4TPMYyhorner",
   },
   {
     title: "Aleksander Borzenets",
-    content: 28,
+    category_id: "2",
+    content:
+      "Every day you send and receive hundreds or more emails, however, you actually do not know whether they will get your targeted customers inbox.",
     featured_image: require("../../assets/images/beach.jpeg"),
+    created_at: "2020-12-29T16:26:13.000000Z",
+    news_url: "https://www.lenbboks.com",
     key: "ozda-XbeP0k",
   },
   {
     title: "Don Delfin Espino",
-    content: 29,
+    category_id: "2",
+    content:
+      "Every day you send and receive hundreds or more emails, however, you actually do not know whether they will get your targeted customers inbox.",
     featured_image: require("../../assets/images/beach.jpeg"),
+    created_at: "2020-12-29T16:26:13.000000Z",
+    news_url: "https://www.gmail.com",
     key: "nBywXevf_jE-",
   },
   {
     title: "Eduardo Dutra",
-    content: 30,
+    category_id: "2",
+    content:
+      "Every day you send and receive hundreds or more emails, however, you actually do not know whether they will get your targeted customers inbox.",
     featured_image: require("../../assets/images/beach.jpeg"),
+    created_at: "2020-12-29T16:26:13.000000Z",
+    news_url: "https://www.xvideos.com",
     key: "ZHy0efLnzVc",
   },
   {
     title: "Wesley Tingey",
+    category_id: "3",
     content: 21,
     featured_image: require("../../assets/images/beach.jpeg"),
+    created_at: "2020-11-11T16:26:13.000000Z",
+    news_url: "https://www.jumia.com",
     key: "TvPCUHten1o",
   },
   {
     title: "Gift Habeshaw",
+    category_id: "3",
     content: 26,
     featured_image: require("../../assets/images/beach.jpeg"),
+    created_at: "2020-11-11T16:26:13.000000Z",
+    news_url: "https://www.google.com",
     key: "dlbiYGwEe9U",
   },
   {
     title: "Henri Pham",
+    category_id: "3",
     content: 30,
     featured_image: require("../../assets/images/beach.jpeg"),
+    created_at: "2020-11-11T16:26:13.000000Z",
+    news_url: "https://www.vuclip.com",
     key: "Ml4tr2WO7JE",
   },
   {
     title: "Nico Marks",
+    category_id: "3",
     content: 24,
     featured_image: require("../../assets/images/beach.jpeg"),
+    created_at: "2020-11-11T16:26:13.000000Z",
+    news_url: "https://www.betking.com",
     key: "mFcc5b_t74Q",
   },
   {
     title: "Sirio",
+    category_id: "4",
     content: 28,
     featured_image: require("../../assets/images/beach.jpeg"),
+    created_at: "2020-11-11T16:26:13.000000Z",
+    news_url: "https://www.bet9ja.com",
     key: "Ty4f_NOFO60'",
   },
   {
     title: "Teymi Townsend",
+    category_id: "4",
     content: 30,
     featured_image: require("../../assets/images/beach.jpeg"),
+    created_at: "2020-11-11T16:26:13.000000Z",
+    news_url: "https://www.yahoo.com",
     key: "AvLHH8qYbAI'",
   },
   {
     title: "Caique Silva",
+    category_id: "4",
     content: 20,
     featured_image: require("../../assets/images/beach.jpeg"),
+    created_at: "2020-11-11T16:26:13.000000Z",
+    news_url: "https://www.lenbooks.com",
     key: "3ujVzg9i2EI'",
   },
   {
     title: "David Yanutenama",
+    category_id: "4",
     content: 21,
     featured_image: require("../../assets/images/beach.jpeg"),
+    created_at: "2020-11-11T16:26:13.000000Z",
+    news_url: "https://www.homelelo.com",
     key: "5AoO7dBurMw'",
   },
   {
     title: "Pawel Karniej",
+    category_id: "4",
     content: 28,
     featured_image: require("../../assets/images/beach.jpeg"),
+    created_at: "2020-11-11T16:26:13.000000Z",
+    news_url: "https://www.xnxx.com",
     key: "kYov4x7nTtuOIlGu7HKTQw",
   },
-];
+]);
 
 export default docs

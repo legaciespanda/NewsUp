@@ -8,7 +8,8 @@ import {
   Image,
   Alert,
   ActivityIndicator,
-  AsyncStorage
+    AsyncStorage,
+  Linking
 } from "react-native";
 //importing from react native paper lib
 import {
@@ -16,6 +17,7 @@ import {
   Title,
   Paragraph,
   Button,
+  Snackbar
 } from "react-native-paper";
 
 import {
@@ -27,43 +29,95 @@ import {
   CardImage,
 } from "react-native-material-cards";
 
+
+//import WebView from "react-native-webview";
+
 //import CardStack from "react-native-card-stack-swiper";
 import Swiper from "react-native-deck-swiper";
+import categoryID from "../util/categoryId";
+import getNewwsBydate from "../util/getLatestNewsByDate";
 
-import Cardz from "../ui-component/Card"
+
+//import Card2 from "../ui-component/Card2";
+import Cardz from "../ui-component/Card";
 
 import axios from "axios";
-import { latestNews, ApiKey } from "../api/News"
+import { latestNews, ApiKey } from "../api/News";
 import { AppStyles } from "../../src/config/AppStyles";
 
-import { docs } from "../api/docs";
+import docs from "../api/docs";
+import Toast from "react-native-simple-toast";
+
+import HandleWebBrowserAsync from "../components/Webview";
 
 
-const initialState = "";
 
 const LatestActivity = ({ navigation }) => {
     const useSwiper = useRef(null).current;
     //const swiperRef = React.createRef();
 
-  const [currentCardIndex, setCount] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [cardsState, updateState] = useState({
-    news: [],
-    swipedAllCards: false,
-    swipeDirection: "",
-    cardIndex: 0,
-    pageNumber: 1,
-  });
-const [getLatestNews, setLatestNews] = useState([]);
-    
+  //const [currentCardIndex, setCount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
+    const [getLatestNews, setLatestNews] = useState("");
+    const [getNewsUrl, setNewsUrl] = useState("");
 
-    //when the component is fukky loaded/mounted
+    //when the component is fully loaded/mounted
     //fetch news from digiwigi after 1 milisecends
     useEffect(() => {
-      getDataUsingAsyncAwaitGetCall();
+      //getDataUsingAsyncAwaitGetCall();
+        bhb();
+        showUnreadNewsNotif();
     }, []);
 
+    //displays number of unread news to the user
+    const showUnreadNewsNotif = () => {
+        Toast.showWithGravity(
+            "Hy! You have got " +
+            `${categoryID(docs, "2").length}` +
+            " unread news today from Digi Wigi",
+            Toast.LONG,
+            Toast.BOTTOM
+        );
+    }
+
+    //function to convert ISODate  value e.g 2020-11-11T16:26:13.000000Z
+    //to date e.g 2020-11-11
+    const convertISODate = (dateString) => {
+        var dd = new Date(dateString)
+            .toISOString()
+            .substring(0, 10);
+      //date2
+      //.split("T")[0];
+      return dd; // "2020-11-12"
+    };
+
+    //function to return current date in a formated way
+    //e.g 2020-11-12
+    const todaysDate = () => {
+        var date = new Date().toISOString().slice(0, 10);
+        return date;
+    }
+    //COMPARING TWO DATES
+    const compareDate = (dateVal1, dateVal2) => {
+        if (dateVal1.valueOf() === dateVal2.valueOf()){
+            return true;
+        }
+        else { return false;}
+    }
+
+    const bhb = () => {
+     fetch(latestNews+ApiKey)
+       .then((response) => response.json())
+       .then((responseJson) => {
+         // set the state of the output here
+           console.log(responseJson);
+        setLatestNews(responseJson.text());
+       })
+       .catch((error) => {
+         console.error(error);
+       });
+    }
 
       //asynchronous get request call to fetech latest news
     const getDataUsingAsyncAwaitGetCall = async () => {
@@ -78,7 +132,7 @@ const [getLatestNews, setLatestNews] = useState([]);
         //   const result = Object.entries(response.data).map(([key, val]) => ({
         //     [key]: val,
         //   }));
-          setLatestNews(JSON.stringify(response.data));
+          setLatestNews(response.data);
                     // updateState({
                     //   ...cardsState,
                     //   cards: [...cardsState.news, ...response.data],
@@ -102,60 +156,55 @@ const [getLatestNews, setLatestNews] = useState([]);
     />
   ) : (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1, padding: 16 }}>
-        <Swiper
-          ref={useSwiper}
-          cards={getLatestNews}
-          cardIndex={0}
-          backgroundColor="white"
-          stackSize={2}
-          showSecondCard
-          animateCardOpacity
-          renderCard={card => {
-            //   <Cardz style={styles.card8} card={card} />
-            return (
-              <Card style={styles.card8}>
-                <CardImage
-                  style={{
-                    width: 350,
-                    height: 300,
-                  }}
-                  title="Lighthouse"
-                  source={{
-                    uri:
-                      "https://blog.trustlancers.com/public/news_image/" +
-                      card.featured_image,
-                  }}
-                />
-                <CardTitle
-                  subtitleAbove={true}
-                  title={card.title}
-                  subtitle={card.title}
-                  //AsyncStorage.setItem("@Store:currentNewsUrl", item.news_url)
-                />
-
-                <CardContent text={card.content} />
-                <CardAction separator={true} inColumn={false}>
-                  <CardButton onPress={() => {}} title={card.title} />
-                </CardAction>
-              </Card>
-            );
-          }}
-          onSwiped={(cardIndex) => {
-            console.log(cardIndex);
-          }}
-          onSwipedAll={() => {
-            console.log("onSwipedAll");
-          }}
-          onSwipedTop={() => {
-            console.log(getLatestNews);
-          }}
-        ></Swiper>
-      </View>
+      {/* <View style={{ flex: 1, padding: 16 }}> */}
+      <Swiper
+        ref={useSwiper}
+        cards={categoryID(docs, "2")}
+        cardIndex={0}
+        backgroundColor="transparent"
+        stackSize={2}
+        showSecondCard
+        cardHorizontalMargin={0}
+        animateCardOpacity
+        disableBottomSwipe
+        renderCard={(card) => <Cardz card={card} />}
+        onSwiped={(cardIndex) => {
+            console.log("Card index " + cardIndex);
+            setNewsUrl(categoryID(docs, "2")[cardIndex].news_url);
+          console.log(docs[cardIndex].created_at);
+        }}
+        onSwipedAll={() => {
+          console.log("onSwipedAll");
+        }}
+        onSwipedTop={() => {
+          console.log(getLatestNews);
+          console.log("Today's date is " + todaysDate());
+          console.log(
+            "converted time is " + convertISODate("2020-11-11T16:26:13.000000Z")
+          );
+          console.log(
+            compareDate(
+              todaysDate(),
+              convertISODate("2020-12-29T16:26:13.000000Z")
+            )
+          );
+          console.log(categoryID(docs, "2"));
+        }}
+        onSwipedBottom={() => {
+          // <Toast message={success} onDismiss={() => {}} />
+        }}
+        onSwipedLeft={() => {
+          console.log(getNewsUrl);
+          HandleWebBrowserAsync(getNewsUrl);
+          //Alert.alert(cardIndex);
+        }}
+      ></Swiper>
+      {/* </View> */}
     </SafeAreaView>
   );
 };
 
+//stylesheet
 const styles = StyleSheet.create({
   container: {
     flex: 1,
