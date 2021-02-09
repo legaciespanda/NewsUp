@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "DigiWigi",
-    "slug": "king",
+    "name": "NewsUp",
+    "slug": "newsUp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -17,17 +17,21 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.megtrix.newsup"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.megtrix.newsup",
+      "versionCode":1,
+      "enableDangerousExperimentalLeanBuilds":true
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logo.png"
     },
-    "description": "RakeshBlog Mobile Application (Android & IOS)"
+    "description": "News Up Mobile Application"
   }
 }

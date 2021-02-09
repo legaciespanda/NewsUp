@@ -1,21 +1,22 @@
-import { Platform, StyleSheet, Dimensions } from "react-native";
-import { Configuration } from "./Configuration";
+import {  StyleSheet, Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 const SCREEN_WIDTH = width < height ? width : height;
-const numColumns = 2;
+
 
 export const AppStyles = {
          color: {
            //05014a
-           deepblue: "#DC143C",
-           activeTintColor: "#DC143C",
-           main: "#DC143C",
-           text: "#DC143C",
-           title: "#DC143C",
-           subtitle: "#DC143C",
+           //#28334AFF #DC143C
+           //YELLOW #FBDE44FF
+           deepblue: "#28334AFF",
+           activeTintColor: "#28334AFF",
+           main: "#28334AFF",
+           text: "#28334AFF",
+           title: "#28334AFF",
+           subtitle: "#28334AFF",
            categoryTitle: "#161616",
-           tint: "#DC143C",
+           tint: "#28334AFF",
            description: "#bbbbbb",
            filterTitle: "#8a8a8a",
            starRating: "#2bdf85",

@@ -1,57 +1,66 @@
 // Import React and Component
 import React, {useState, useEffect} from 'react';
 import { ActivityIndicator, View, StyleSheet, Image, Text, Alert } from 'react-native';
-import { AppStyles } from "../config/AppStyles";
 
-import AsyncStorage from '@react-native-community/async-storage';
 import { checkConnected } from "../../src/config/InternetDetect";
-//import NoInternetActivity from "../../src/activity/NoInternetActivity";
+
+import firebase from "../core/config";
+import "@firebase/auth";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SplashScreen = ({navigation}) => {
   //State for ActivityIndicator animation
   const [animating, setAnimating] = useState(true);
+  const [isLoggedIn, setisLoggedIn] = useState();
 
-
-    componentDidMount = () => {
-    };
-
-  //check for internet connection and set connection status
-    checkConnected().then(checkConnected=>{
-      if (checkConnected) {
-        setTimeout(() => {
-          setAnimating(false);
-          //Check if user_id is set or not
-          //If not then send for Authentication
-          //else send to Home Screen
-          AsyncStorage.getItem("user_id").then((value) =>
-            navigation.replace(
-              value === null ? "NavigationComponent" : "NavigationComponent"
-            )
-          );
-        }, 5000);
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("@guest_login");
+      if (value !== null) {
+        return value;
       }
-    });
+    } catch (e) {
+      // error reading value
+      console.log(e);
+    }
+  };
+
+  const getData2 = async () => { 
+      return await AsyncStorage.getItem("@guest_login");
+  }
+  useEffect(() => {
+    if (checkConnected) {
+      setTimeout(() => {
+        setAnimating(false);
+        const subscriber = firebase
+          .auth()
+          .onAuthStateChanged(onAuthStateChanged);
+        return subscriber;
+      }, 4000);
+    }
+      });
   
-  
-            // useEffect(() => {
-            //   setTimeout(() => {
-            //     setAnimating(false);
-            //     //Check if user_id is set or not
-            //     //If not then send for Authentication
-            //     //else send to Home Screen
-            //     AsyncStorage.getItem("user_id").then((value) =>
-            //       navigation.replace(
-            //         value === null ? "Auth" : "NavigationComponent"
-            //       )
-            //     );
-            //   }, 5000);
-            // }, []);
+        function onAuthStateChanged(isLoggedIn) {
+             setisLoggedIn(isLoggedIn);
+             if (isLoggedIn) {
+               navigation.replace("NavigationComponent");
+             } else if (getData2() === "yes") {
+               navigation.replace("NavigationComponent");
+             }
+             else {
+               navigation.replace("Auth");
+             }
+             // if (initializing) setInitializing(false);
+  }
+
+  //console.log("Async Data is",getData2());
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>DigiWigi</Text>
+      <Text style={styles.header}>Initializing NewsUp...</Text>
       <Image
-        source={require("../../assets/auth/logo.png")}
+        source={require("../../assets/loader.gif")}
         style={{ width: "90%", resizeMode: "contain", margin: 30 }}
       />
 
@@ -72,7 +81,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: AppStyles.color.deepblue,
+    backgroundColor: "#FFFFFF",
   },
   activityIndicator: {
     alignItems: "center",
@@ -80,7 +89,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 20,
-    color: "#ffff",
+    color: "#28334AFF",
     fontWeight: "bold",
     paddingVertical: 14,
   },

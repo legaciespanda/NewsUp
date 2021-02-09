@@ -1,18 +1,20 @@
 import React, { memo, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity,Alert } from "react-native";
 import Background from "../ui-component/Background";
 import Logo from "../ui-component/Logo";
 import Header from "../ui-component/Header";
 import Button from "../ui-component/Button";
 import TextInput from "../ui-component/TextInput";
-import BackButton from "../ui-component/BackButton";
 import { theme } from "../core/Theme";
 import {
   emailValidator,
   passwordValidator,
   nameValidator,
 } from "../core/Utils";
-import { signInUser } from "../api/Firsebaseauth-api";
+
+
+import { registerUser, createUserData } from "../api/Firsebaseauth-api";
+
 import Toast from "../ui-component/Toast";
 
 const RegisterActivity = ({ navigation }) => {
@@ -23,7 +25,7 @@ const RegisterActivity = ({ navigation }) => {
   const [error, setError] = useState("");
 
   const _onSignUpPressed = async () => {
-    if (loading) return;
+    //if (loading) return;
 
     const nameError = nameValidator(name.value);
     const emailError = emailValidator(email.value);
@@ -38,26 +40,49 @@ const RegisterActivity = ({ navigation }) => {
 
     setLoading(true);
 
-    const response = await signInUser({
-      name: name.value,
+    createUserData({
       email: email.value,
       password: password.value,
+      name: name.value,
     });
+    
+    await registerUser({
+      email: email.value,
+      password: password.value,
+      name: name.value,
+    });
+      if (response.error) {
+        //setError(response.error);
+        setLoading(false);
+        navigation.replace("Auth");
+      }
+      Alert.alert(
+              "Thanks For Registering",
+              "Your NewsUp account has been successfully created. Please login to use the application",
+              [
+                {
+                  text: "Ok",
+                  onPress: () => {
+                    return null;
+                  },
+                },
+              ],
+              { cancelable: false }
+            )
+    // if (response.error) {
+    //   setError(response.error);
+    // }
 
-    if (response.error) {
-      setError(response.error);
-    }
+    navigation.replace("NavigationComponent")
 
     setLoading(false);
   };
 
   return (
     <Background>
-      {/* <BackButton goBack={() => navigation.navigate("HomeScreen")} /> */}
-
       <Logo />
 
-      <Header>Create A DigiWigi Account</Header>
+      <Header>Create A NewsUp Account</Header>
 
       <TextInput
         label="Name"
@@ -98,11 +123,11 @@ const RegisterActivity = ({ navigation }) => {
         onPress={_onSignUpPressed}
         style={styles.button}
       >
-        Become A DigiWigi Member
+        Become A NewsUp Member
       </Button>
 
       <View style={styles.row}>
-        <Text style={styles.label}>Already have a DigiWigi account? </Text>
+        <Text style={styles.label}>Already have a NewsUp account? </Text>
         <TouchableOpacity onPress={() => navigation.navigate("LoginActivity")}>
           <Text style={styles.link}>Login</Text>
         </TouchableOpacity>

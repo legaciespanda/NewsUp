@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,23 +6,14 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-//import { AppLoading, Asset, Font, Icon } from "expo";
-import { LinearGradient } from "expo-linear-gradient";
-import { images, icons, COLORS, FONTS, SIZES } from "../home-config";
+
+import { images, icons, COLORS, SIZES } from "../home-config";
 import { Text } from "react-native-paper";
-import categoryID from "../util/categoryId";
-import Toast from "react-native-simple-toast";
-import docs from "../api/docs";
+import { appIconUrl } from "../api/News";
 
 
+import { useNavigation } from "@react-navigation/native";
 
-//   _loadResourcesAsync = async () => {
-//     return Promise.all([
-//       Font.loadAsync({
-//         ...FONTS.body3,
-//       }),
-//     ]);
-// };
   
 const NewsOptions = ({ icon, label, onPress }) => {
     
@@ -31,7 +22,7 @@ const NewsOptions = ({ icon, label, onPress }) => {
         style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         onPress={onPress}
       >
-        <View style={[styles.shadow, { width: 120, height: 100 }]}>
+        <View style={[styles.shadow, { width: 90, height: 90 }]}>
           <Image
             style={[
               {
@@ -45,72 +36,59 @@ const NewsOptions = ({ icon, label, onPress }) => {
             resizeMode="cover"
           />
         </View>
-        <Text style={{ marginTop: -10, color: COLORS.gray, ...FONTS.body3 }}>
+        <Text style={{ marginTop: -10, color: COLORS.gray }}>
           {label}
         </Text>
       </TouchableOpacity>
     );
 };
-//news category option item functional component
-const OptionItemz = ({ bgColor, icon, label, onPress }) => {
- //const fonnt = Font.loadAsync({ ...FONTS.body3 });
+// //news category option item functional component
+// const OptionItemz = ({ bgColor, icon, label, onPress }) => {
 
-  return (
-    <TouchableOpacity
-      style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-      onPress={onPress}
-    >
-      <View style={[styles.shadow, { width: 60, height: 60 }]}>
-        <LinearGradient
-          style={[
-            {
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 15,
-              backgroundColor: "red",
-            },
-          ]}
-          colors={bgColor}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-        >
-          <Image
-            source={icon}
-            resizeMode="cover"
-            style={{
-              tintColor: COLORS.white,
-              width: 30,
-              height: 30,
-            }}
-          />
-        </LinearGradient>
-      </View>
-      <Text
-        style={{ marginTop: SIZES.base, color: COLORS.gray, ...FONTS.body3 }}
-      >
-        {label}
-      </Text>
-    </TouchableOpacity>
-  );
-};
+//   return (
+//     <TouchableOpacity
+//       style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+//       onPress={onPress}
+//     >
+//       <View style={[styles.shadow, { width: 60, height: 60 }]}>
+//         <LinearGradient
+//           style={[
+//             {
+//               flex: 1,
+//               alignItems: "center",
+//               justifyContent: "center",
+//               borderRadius: 15,
+//               backgroundColor: "red",
+//             },
+//           ]}
+//           colors={bgColor}
+//           start={{ x: 0, y: 0 }}
+//           end={{ x: 0, y: 1 }}
+//         >
+//           <Image
+//             source={icon}
+//             resizeMode="cover"
+//             style={{
+//               tintColor: COLORS.white,
+//               width: 30,
+//               height: 30,
+//             }}
+//           />
+//         </LinearGradient>
+//       </View>
+//       <Text
+//         style={{ marginTop: SIZES.base, color: COLORS.gray}}
+//       >
+//         {label}
+//       </Text>
+//     </TouchableOpacity>
+//   );
+// };
 
-const HomeActivity = ({ navigation }) => {
 
-    useEffect(() => {
-        showUnreadNewsNotif();
-    },[3])
+const HomeActivity = () => {
 
-    //displays number of unread news to the user
-    const showUnreadNewsNotif = () => {
-        Toast.showWithGravity(
-            "Hy! You have got " +
-            `${categoryID(docs, "2").length}` +
-            " latest news today from Digi Wigi. Please navigate to the Just-In tab to start reading",
-            Toast.LONG,
-            Toast.CENTER
-        );
-    }
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -124,7 +102,7 @@ const HomeActivity = ({ navigation }) => {
       >
         <Image
           source={{
-            uri: "https://blog.trustlancers.com/app-icons/home-banner.jpg",
+            uri: appIconUrl + "home-banner.jpg",
           }}
           resizeMode="cover"
           style={{
@@ -146,25 +124,23 @@ const HomeActivity = ({ navigation }) => {
         >
           <NewsOptions
             icon={{
-              uri: "https://blog.trustlancers.com/app-icons/latest.png",
+              uri: appIconUrl + "latest.png",
             }}
             label="Latest"
             onPress={() => {
-              console.log("Flight");
+               navigation.navigate("LatestNewsActivity");
             }}
           />
           <NewsOptions
             icon={{
-              uri: "https://blog.trustlancers.com/app-icons/technology.png",
+              uri: appIconUrl + "technology.png",
             }}
             label="Technology"
-            onPress={() => {
-              console.log("Flight");
-            }}
+            onPress={() => navigation.navigate("TechnologyActivity")}
           />
           <NewsOptions
             icon={{
-              uri: "https://blog.trustlancers.com/app-icons/marketing.png",
+              uri: appIconUrl + "marketing.png",
             }}
             label="Marketing"
             onPress={() => {
@@ -182,31 +158,31 @@ const HomeActivity = ({ navigation }) => {
         >
           <NewsOptions
             icon={{
-              uri: "https://blog.trustlancers.com/app-icons/advertising.png",
+              uri: appIconUrl + "advertising.png",
             }}
             label="Advertising"
             onPress={() => {
-              console.log("Flight");
+               navigation.navigate("AdvertActivity");
             }}
           />
 
           <NewsOptions
             icon={{
-              uri: "https://blog.trustlancers.com/app-icons/digital.png",
+              uri: appIconUrl + "digital.png",
             }}
             label="Digital"
             onPress={() => {
-              console.log("Flight");
+               navigation.navigate("DigitalActivity");
             }}
           />
 
           <NewsOptions
             icon={{
-              uri: "https://blog.trustlancers.com/app-icons/business.png",
+              uri: appIconUrl + "business.png",
             }}
             label="Business"
             onPress={() => {
-              console.log("Flight");
+               navigation.navigate("BusinessActivity");
             }}
           />
         </View>
@@ -220,29 +196,29 @@ const HomeActivity = ({ navigation }) => {
         >
           <NewsOptions
             icon={{
-              uri: "https://blog.trustlancers.com/app-icons/sports.png",
+              uri: appIconUrl + "sports.png",
             }}
             label="Sports"
             onPress={() => {
-              console.log("Flight");
+               navigation.navigate("SportsActivity");
             }}
           />
           <NewsOptions
             icon={{
-              uri: "https://blog.trustlancers.com/app-icons/radio.png",
+              uri: appIconUrl + "radio.png",
             }}
             label="Radio"
             onPress={() => {
-              console.log("Flight");
+               navigation.navigate("RadioActivity");
             }}
           />
           <NewsOptions
             icon={{
-              uri: "https://blog.trustlancers.com/app-icons/strp.png",
+              uri: appIconUrl + "strp.png",
             }}
             label="Startups"
             onPress={() => {
-              console.log("Flight");
+               navigation.navigate("StartupsActivity");
             }}
           />
           {/* <OptionItemz

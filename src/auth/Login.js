@@ -1,8 +1,9 @@
 import * as React from "react";
-import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { StyleSheet, Text, TextInput, View, Button,Alert } from "react-native";
 import { AppStyles } from "../config/AppStyles";
-import firebase from "@react-native-firebase/app";
-import { AsyncStorage } from "react-native";
+
+import firebase from "../core/config";
+import "@firebase/auth";
 
 class LoginActivity extends React.Component {
   constructor(props) {
@@ -14,45 +15,25 @@ class LoginActivity extends React.Component {
     };
   }
 
-  onPressLogin = () => {
+ onPressLogin = () => {
     const { email, password } = this.state;
     if (email.length <= 0 || password.length <= 0) {
       alert("Please fill out the required fields.");
       return;
     }
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((response) => {
-        const { navigation } = this.props;
-        user_uid = response.user._user.uid;
-        firebase
-          .firestore()
-          .collection("users")
-          .doc(user_uid)
-          .get()
-          .then(function (user) {
-            if (user.exists) {
-              AsyncStorage.setItem("@loggedInUserID:id", user_uid);
-              AsyncStorage.setItem("@loggedInUserID:key", email);
-              AsyncStorage.setItem("@loggedInUserID:password", password);
-              navigation.dispatch({ type: "Login", user: user });
-            } else {
-              alert("User does not exist. Please try again.");
-            }
-          })
-          .catch(function (error) {
-            const { code, message } = error;
-            alert(message);
-          });
-      })
-      .catch((error) => {
-        const { code, message } = error;
-        alert(message);
-        // For details of error codes, see the docs
-        // The message contains the default Firebase string
-        // representation of the error
-      });
+      try {
+        let response = await firebase
+          .auth()
+          .signInWithEmailAndPassword(email, password);
+        if (response) {
+          Alert.alert("Logged In Success ✅")
+          console.log(response);
+          props.navigation.replace("HomeActivity");
+        }
+      } catch (e) {
+        Alert.alert("Error", e.message);
+        console.error(e.message);
+      }
   };
 
   render() {

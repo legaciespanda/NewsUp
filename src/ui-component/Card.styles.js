@@ -32,7 +32,7 @@ export default StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     color: "black",
-    fontFamily: "Avenir",
+    // fontFamily: "Avenir",
     //marginTop:90
   },
   content: {

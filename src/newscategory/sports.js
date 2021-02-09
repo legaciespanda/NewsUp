@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, useRef } from "react";
+import React, { useState, memo, useEffect, useReducer, useRef } from "react";
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
   AsyncStorage,
   Linking,
 } from "react-native";
+//importing from react native paper lib
 
 //import CardStack from "react-native-card-stack-swiper";
 import Swiper from "react-native-deck-swiper";
@@ -24,21 +25,21 @@ import axios from "axios";
 import { latestNews, ApiKey } from "../api/News";
 import { AppStyles } from "../../src/config/AppStyles";
 
-import docs from "../api/docs";
 import Toast from "react-native-simple-toast";
 
 import HandleWebBrowserAsync from "../components/Webview";
 
-const LatestActivity = ({ navigation }) => {
+const SportsActivity = () => {
   const useSwiper = useRef(null).current;
-  //const swiperRef = React.createRef();
 
-  //const [currentCardIndex, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const [getLatestNews, setLatestNews] = useState([]);
   const [getNewsUrl, setNewsUrl] = useState("");
-  const [isDataReturned, setisDataReturned] = useState(false);
+
+
+    //category ID for news
+  const sportsCategoryId = 2;
 
   //when the component is fully loaded/mounted
   //fetch news from digiwigi after 1 milisecends
@@ -51,13 +52,12 @@ const LatestActivity = ({ navigation }) => {
   const showUnreadNewsNotif = () => {
     Toast.showWithGravity(
       "Hy! You have got " +
-        `${categoryID(getLatestNews, 13).length}` +
+        `${categoryID(getLatestNews, sportsCategoryId).length}` +
         " unread news today from Newsup",
       Toast.LONG,
       Toast.BOTTOM
     );
   };
-
 
   //function to return current date in a formated way
   //e.g 2020-11-12
@@ -75,14 +75,14 @@ const LatestActivity = ({ navigation }) => {
       setLoading(false);
       try {
         const response = await axios.get(latestNews + ApiKey);
-        
+
         setLatestNews(response.data);
         setLoading(false);
         //show unread news notification
-          //showUnreadNewsNotif();
-        
-          //response.data.map((data) => setLatestNews(data));
-          console.log(getLatestNews);
+        //showUnreadNewsNotif();
+
+        //response.data.map((data) => setLatestNews(data));
+        console.log(getLatestNews);
       } catch (error) {
         // handle error
         alert(error.message);
@@ -104,7 +104,7 @@ const LatestActivity = ({ navigation }) => {
         ref={useSwiper}
         //cards={categoryID(docs, "2")}
         //get all the latest news by their category ID
-        cards={categoryID(getLatestNews, 13)}
+        cards={categoryID(getLatestNews, sportsCategoryId)}
         cardIndex={0}
         backgroundColor="transparent"
         stackSize={2}
@@ -115,25 +115,24 @@ const LatestActivity = ({ navigation }) => {
         renderCard={(card) => (card && <Cardz card={card} />) || null}
         onSwiped={(cardIndex) => {
           //console.log("Card index " + cardIndex);
-            //get the current new url by its index
-          setNewsUrl(categoryID(getLatestNews, 13)[cardIndex].news_url);
+          //get the current new url by its index
+          setNewsUrl(categoryID(getLatestNews, sportsCategoryId)[cardIndex].news_url);
           //console.log(docs[cardIndex].created_at);
         }}
         onSwipedAll={() => {
-                        Alert.alert(
-                            "End of News",
-                          "You have read all latest news for today " +
-                            `${todaysDate()}`,
-                          [
-                            {
-                              text: "Ok",
-                              onPress: () => {
-                                return null;
-                              },
-                            },
-                          ],
-                          { cancelable: false }
-                        );
+          Alert.alert(
+            "End of News",
+            "You have read all latest news for today " + `${todaysDate()}`,
+            [
+              {
+                text: "Ok",
+                onPress: () => {
+                  return null;
+                },
+              },
+            ],
+            { cancelable: false }
+          );
         }}
         onSwipedTop={() => {
           //console.log("Ernest", getLatestNews);
@@ -194,4 +193,4 @@ const styles = StyleSheet.create({
     height: 50,
   },
 });
-export default LatestActivity;
+export default SportsActivity;

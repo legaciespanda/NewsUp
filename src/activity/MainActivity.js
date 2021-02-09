@@ -21,9 +21,9 @@ const SecondActivity = ({ navigation }) => {
   
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: "home", title: "Home", icon: "shield-home" },
-    { key: "latest", title: "Just In", icon: "newspaper" },
-    { key: "settings", title: "Settings", icon: "cogs" },
+    { key: "home", title: "Home", icon: "shield-home", color: "#FBDE44FF" },
+    { key: "latest", title: "Just In", icon: "newspaper", color: "#FBDE44FF" },
+    { key: "settings", title: "Settings", icon: "cogs", color: "#FBDE44FF" },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({

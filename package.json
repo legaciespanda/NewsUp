@@ -8,7 +8,8 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@react-native-community/async-storage": "^1.12.1",
+    "@react-native-async-storage/async-storage": "^1.13.2",
+    "@react-native-community/async-storage": "~1.12.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/netinfo": "^5.9.7",
     "@react-navigation/drawer": "^5.11.4",
@@ -27,10 +28,8 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.4.tar.gz",
-    "react-native-card-stack-swiper": "^1.2.5",
     "react-native-communications": "^2.2.1",
     "react-native-deck-swiper": "^2.0.5",
-    "react-native-exit-app": "^1.1.0",
     "react-native-gesture-handler": "^1.8.0",
     "react-native-material-cards": "^1.0.15",
     "react-native-paper": "^4.4.1",
@@ -38,16 +37,12 @@
     "react-native-responsive-screen": "^1.4.1",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.15.0",
-    "react-native-share": "^4.1.0",
     "react-native-simple-toast": "^1.1.3",
     "react-native-status-bar-height": "^2.6.0",
-    "react-native-styled-dialogs": "^1.0.0",
     "react-native-vector-icons": "^7.1.0",
     "react-native-web": "~0.13.12",
     "react-native-webview": "^11.0.2",
-    "react-navigation": "^4.4.3",
-    "react-redux": "^7.2.2",
-    "redux": "^4.0.5"
+    "react-navigation": "^4.4.3"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"

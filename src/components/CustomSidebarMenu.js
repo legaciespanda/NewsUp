@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -8,11 +8,10 @@ import {
   Linking,
   Alert,
   Share,
-  Platform
+  Platform,
+  BackHandler
 } from "react-native";
-//import Share from "react-native-share";
 
-//import * as Sharing from "expo-sharing";
 import Communications from "react-native-communications";
 
 import {
@@ -22,9 +21,57 @@ import {
 } from "@react-navigation/drawer";
 
 
-//import AsyncStorage from '@react-native-community/async-storage';
+import firebase from "../core/config";
+import "@firebase/auth";
+import "@firebase/firestore";
 
 const CustomSidebarMenu = (props) => {
+  const [userData, setUserData] = useState([]);
+  const [isLoggedIn, setisLoggedIn] = useState();
+
+      useEffect(() => {
+             setTimeout(() => {
+               getUSerDetail();
+              const subscriber = firebase
+                .auth()
+                .onAuthStateChanged(onAuthStateChanged);
+              return subscriber;
+             }, 3000);
+      }, []);
+  
+  function onAuthStateChanged(isLoggedIn) {
+    setisLoggedIn(isLoggedIn);
+  }
+  //current logged in user email
+    const userEmail = () => {
+      let email = firebase.auth().currentUser.email;
+      return email;
+    };
+
+  //get user details from firebase
+   const getUSerDetail = async () => {
+     try {
+       const userDatax = await firebase
+         .firestore()
+         .collection("Users")
+         .doc(userEmail())
+         .get();
+       if (userDatax != undefined) {
+         //fetch user data and push to array
+         setUserData(userDatax.data());
+         //console.log("Get Task 3", userData);
+       }
+     } catch (error) {
+       //console.log("Get Task 3", error);
+     }
+  };
+  
+  //function for logging user out of the applicatio
+    const __logout = () => {
+      firebase.auth().signOut();
+      props.navigation.replace("Auth");
+  };
+  
   const BASE_PATH =
     "https://raw.githubusercontent.com/AboutReact/sampleresource/master/";
   const proileImage = "react_logo.png";
@@ -33,72 +80,69 @@ const CustomSidebarMenu = (props) => {
     <SafeAreaView style={{ flex: 1 }}>
       {/*Top Large Image */}
       <Image
-        source={{ uri: BASE_PATH + proileImage }}
+        source={require("../../assets/auth/logo.png")}
         style={styles.sideMenuProfileIcon}
       />
       <View style={styles.appname}>
-        <Text>Newsuponline</Text>
+        {/* Only show user's name if the user is logged in */}
+        {isLoggedIn ? (
+          <Text>Hy {`${userData.name}`}</Text>
+        ) : (
+          <Text>NewsUp</Text>
+        )}
+        {/* <Text>Hy {`${userData.name}`}</Text> */}
       </View>
 
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
 
-        {/* <DrawerItem
-          label="User Profile"
-          onPress={() =>
-            Platform.OS === "android"
-              ? Linking.openURL("https://google.com/")
-              : Linking.openURL("https://aboutreact.com/")
-          }
-        /> */}
-
-        <DrawerItem label="Contact Us"
-          onPress={() => {
-                      Alert.alert(
-                        "Contact Digi Wigi",
-                        "Please choose your preffered method to get in contact with Digi-Wigi.",
-                        [
-                          {
-                            text: "Send Email",
-                            onPress: () => {
-                              //send email
-                              Communications.email(
-                                ["contact@gmail.com", "youandinews@gmail.com"],
-                                null,
-                                null,
-                                "Contact Digi-Wigi",
-                                "Please write to us and we will resond in a short while"
-                              );
-                            },
-                          },
-
-                          {
-                            text: "Phone Call",
-                            //make a phon call
-                            onPress: () => {
-                              Communications.phonecall("+2347012159048", true);
-                            },
-                          },
-                        ],
-                        { cancelable: true }
-                      );
-        }}
-        />
         <DrawerItem
-          label="Invite Friends"
-          onPress={() =>
-            shareWithFriends()
-          }
+          label="Contact Us"
+          onPress={() => {
+            Alert.alert(
+              "Contact NewsUp",
+              "Please choose your preffered method to get in contact with NewsUp.",
+              [
+                {
+                  text: "Send Email",
+                  onPress: () => {
+                    //send email
+                    Communications.email(
+                      ["contact@newsuponline.com"],
+                      null,
+                      null,
+                      "Contact NewsUp",
+                      "Please write to us and we will resond in a short while"
+                    );
+                  },
+                },
+
+                {
+                  text: "Phone Call",
+                  //make a phon call
+                  onPress: () => {
+                    Communications.phonecall("+919000013014", true);
+                  },
+                },
+              ],
+              { cancelable: true }
+            );
+          }}
         />
+        <DrawerItem label="Invite Friends" onPress={() => shareWithFriends()} />
 
         <View style={styles.customItem}>
           <Text
             onPress={() =>
               Platform.OS === "android"
-                ? Linking.openURL(
-                    "https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en"
-                  )
-                : Linking.openURL("applinks:share.myapp.com")
+                ?
+                 Linking.openURL("market://details?id=com.megtrix.newsup")
+                // Linking.openURL(
+                //     "https://play.google.com/store/apps/details?id=com.megtrix.newsup&hl=en"
+                //   )
+                :
+                Linking.openURL("market://details?id=com.megtrix.newsup")
+                //Linking.openURL("applinks:share.myapp.com")
             }
           >
             Rate Our App
@@ -112,7 +156,7 @@ const CustomSidebarMenu = (props) => {
           label="Exit"
           onPress={() =>
             Alert.alert(
-              "Exit DigiWigi",
+              "Exit NewsUp",
               "Are you sure? You want to exit application?",
               [
                 {
@@ -123,20 +167,43 @@ const CustomSidebarMenu = (props) => {
                 },
                 {
                   text: "Exit",
-                  onPress: () => {
-                    //AsyncStorage.clear();
-                    //props.navigation.replace("Auth");
-                    return null;
-                  },
+                  onPress: () => BackHandler.exitApp(),
                 },
               ],
               { cancelable: false }
             )
           }
         />
+        {/* Only show logout option if the user has been logged out */}
+        {isLoggedIn ? (
+          <DrawerItem
+            label="Logout"
+            onPress={() =>
+              Alert.alert(
+                "Log Out",
+                "Are you sure? You want to log out of NewsUP?",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => {
+                      return null;
+                    },
+                  },
+                  {
+                    text: "Logut",
+                    onPress: () => {
+                      __logout();
+                    },
+                  },
+                ],
+                { cancelable: false }
+              )
+            }
+          />
+        ) : null}
       </DrawerContentScrollView>
       <Text style={{ fontSize: 16, textAlign: "center", color: "grey" }}>
-        Newsuponline- Version 0.1
+        NewsUp- Version 1.0.0
       </Text>
     </SafeAreaView>
   );
@@ -161,8 +228,8 @@ const share2 = () => {
 
   const shareWithFriends = () => {
     const inputValue =
-      "Hello friends! Download DigiWigi and install to start getting latest news";
-    const titleVal = "DigiWigi";
+      "Hello friends! Download NewsUp and install to start getting latest news";
+    const titleVal = "NewsUp";
     const urlVal = "";
 
     //Here is the Share API

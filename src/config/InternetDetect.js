@@ -1,6 +1,5 @@
 import NetInfo from '@react-native-community/netinfo';
 import { Alert, BackHandler } from "react-native";
-import RNExitApp from "react-native-exit-app";
 
 export const checkConnected = ()=>{
     return NetInfo.fetch().then(state => {
@@ -11,7 +10,7 @@ export const checkConnected = ()=>{
         } else {
             Alert.alert(
               "Error in Internet Connection",
-              "To use DigiWigi, you must be connected to a Wi-Fi or turn on data",
+              "To use NewsUp, you must be connected to a Wi-Fi or turn on data",
               [
                 {
                   text: "No",

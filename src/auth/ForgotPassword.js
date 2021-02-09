@@ -1,5 +1,5 @@
 import React, { memo, useState } from "react";
-import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, View, Alert } from "react-native";
 import Background from "../ui-component/Background";
 import Logo from "../ui-component/Logo";
 import Header from "../ui-component/Header";
@@ -7,15 +7,12 @@ import Button from "../ui-component/Button";
 import TextInput from "../ui-component/TextInput";
 import BackButton from "../ui-component/BackButton";
 import { theme } from "../core/Theme";
-import { emailValidator, passwordValidator } from "../core/Utils";
-import { signInUser } from "../api/Firsebaseauth-api";
+import { emailValidator } from "../core/Utils";
+import { __resetPassword } from "../api/Firsebaseauth-api";
 import Toast from "../ui-component/Toast";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const LoginActivity = ({ navigation }) => {
+const ForgotPasswordActivity = ({ navigation }) => {
   const [email, setEmail] = useState({ value: "", error: "" });
-  const [password, setPassword] = useState({ value: "", error: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -23,44 +20,40 @@ const LoginActivity = ({ navigation }) => {
     //if (loading) return;
 
     const emailError = emailValidator(email.value);
-    const passwordError = passwordValidator(password.value);
 
-    if (emailError || passwordError) {
+    if (emailError) {
       setEmail({ ...email, error: emailError });
-      setPassword({ ...password, error: passwordError });
       return;
     }
 
-    await signInUser({
-      email: email.value,
-      password: password.value,
-    });
     setLoading(true);
 
+      await __resetPassword(email.value);
+            Alert.alert(
+              "Passsword Reset Link Sent ✅",
+              "Please check your email and click on the link to reset your password",
+              [
+                {
+                  text: "Ok",
+                  onPress: () => {
+                    return null;
+                  },
+                },
+              ],
+              { cancelable: false }
+            );
+      
     // if (response.error) {
     //   setError(response.error);
     // }
-
-        if (response.error) {
-          //setError(response.error);
-          setLoading(false);
-          navigation.replace("Auth");
+            if (response.error) {
+              //setError(response.error);
+              setLoading(false);
+              navigation.replace("ForgotPasswordActivity");
         }
-    navigation.replace("NavigationComponent");
 
-    //setLoading(false);
+    setLoading(false);
   };
-
-  const loginAsGuest = async () => {
-    let value = "yes";
-    try {
-        await AsyncStorage.setItem('@guest_login', value)
-      } catch (e) {
-        // saving error
-      console.log(e);
-      }
-    navigation.replace("NavigationComponent");
-  }
 
   return (
     <Background>
@@ -68,7 +61,7 @@ const LoginActivity = ({ navigation }) => {
 
       <Logo />
 
-      <Header>Welcome back to NewsUp</Header>
+      <Header>Password Reset</Header>
 
       <TextInput
         label="Email"
@@ -83,39 +76,23 @@ const LoginActivity = ({ navigation }) => {
         keyboardType="email-address"
       />
 
-      <TextInput
-        label="Password"
-        returnKeyType="done"
-        value={password.value}
-        onChangeText={(text) => setPassword({ value: text, error: "" })}
-        error={!!password.error}
-        errorText={password.error}
-        secureTextEntry
-        autoCapitalize="none"
-      />
-
       <View style={styles.forgotPassword}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("ForgotPasswordActivity")}
+          onPress={() => navigation.navigate("ForgotPasswordScreen")}
         >
-          <Text style={styles.label}>Forgot your password?</Text>
         </TouchableOpacity>
       </View>
 
       <Button loading={loading} mode="contained" onPress={_onLoginPressed}>
-        Login to NewsUp
-      </Button>
-
-      <Button mode="contained" onPress={loginAsGuest}>
-        Skip Login
+        Reset Password
       </Button>
 
       <View style={styles.row}>
-        <Text style={styles.label}>Don’t have an account? </Text>
+        <Text style={styles.label}>Login to your account? </Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate("RegisterActivity")}
+          onPress={() => navigation.navigate("LoginActivity")}
         >
-          <Text style={styles.link}>Sign up on NewsUp</Text>
+          <Text style={styles.link}>Login</Text>
         </TouchableOpacity>
       </View>
 
@@ -143,4 +120,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(LoginActivity);
+export default memo(ForgotPasswordActivity);
