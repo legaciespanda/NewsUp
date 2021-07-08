@@ -3,7 +3,7 @@
     "name": "NewsUp",
     "slug": "newsUp",
     "privacy": "public",
-    "version": "1.0.0",
+    "version": "1.3.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "splash": {
@@ -11,10 +11,6 @@
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
-    "platforms": [
-      "ios",
-      "android"
-    ],
 
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -32,8 +28,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.megtrix.newsup",
-      "versionCode":1,
-      "enableDangerousExperimentalLeanBuilds":true,
+      "versionCode":4,
         "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",

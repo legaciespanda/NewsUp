@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
 import Constants from "expo-constants";
@@ -14,8 +15,8 @@ const HandleWebBrowserAsync = async (url) => {
         // _removeLinkingListener();
         // }
     } catch (error) {
-        Alert.alert("Error:", error.message);;
-        console.log("Error:" + error.message);
+        alert(error.message);;
+        console.log("Error:", error.message);
     }
 };
 //////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-import React, { useState, memo, useEffect, useReducer, useRef } from "react";
+import React, { useState, useEffect, useReducer, useRef } from "react";
 import {
   View,
   Text,
@@ -10,8 +10,8 @@ import {
   ActivityIndicator,
   AsyncStorage,
   Linking,
+  RefreshControl,
 } from "react-native";
-//importing from react native paper lib
 
 //import CardStack from "react-native-card-stack-swiper";
 import Swiper from "react-native-deck-swiper";
@@ -25,38 +25,51 @@ import axios from "axios";
 import { latestNews, ApiKey } from "../api/News";
 import { AppStyles } from "../../src/config/AppStyles";
 
+import docs from "../api/docs";
 import Toast from "react-native-simple-toast";
 
 import HandleWebBrowserAsync from "../components/Webview";
 
-const TechnologyActivity = () => {
+const TechnologyActivity = ({ navigation }) => {
   const useSwiper = useRef(null).current;
+  //const swiperRef = React.createRef();
 
+  //const [currentCardIndex, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const [getLatestNews, setLatestNews] = useState([]);
   const [getNewsUrl, setNewsUrl] = useState("");
+  const [refreshPage, setRefreshPage] = useState("");
+  const [isDataReturned, setisDataReturned] = useState(false);
+  const [finishswipe, setfinishswipe] = useState(false);
+  const [disablells, setdisablells] = useState(false);
 
-      //category ID for news
-  const techCategoryId = 8;
+  //category ID for news
+  const advertCategoryId = 8;
 
   //when the component is fully loaded/mounted
   //fetch news from digiwigi after 1 milisecends
   useEffect(() => {
-    getDataUsingAsyncAwaitGetCall();
+    //only fetch news when component has been mounted
+    let mounted = true;
+    if (mounted) {
+      getDataUsingAsyncAwaitGetCall();
+    }
+    //cancel all active subscription
+    return () => (mounted = false);
     //bhb();
-  }, []);
+  }, [navigation]);
 
   //displays number of unread news to the user
-  const showUnreadNewsNotif = () => {
-    Toast.showWithGravity(
-      "Hy! You have got " +
-        `${categoryID(getLatestNews, techCategoryId).length}` +
-        " unread news today from Newsup",
-      Toast.LONG,
-      Toast.BOTTOM
-    );
-  };
+  // const showUnreadNewsNotif = () => {
+  //   Toast.showWithGravity(
+  //     "Hy! You have got " +
+  //       `${categoryID(getLatestNews, 13).length}` +
+  //       " unread news today from Newsup",
+  //     Toast.LONG,
+  //     Toast.BOTTOM
+  //   );
+  // };
 
   //function to return current date in a formated way
   //e.g 2020-11-12
@@ -81,7 +94,7 @@ const TechnologyActivity = () => {
         //showUnreadNewsNotif();
 
         //response.data.map((data) => setLatestNews(data));
-        console.log(getLatestNews);
+        //console.log(getLatestNews);
       } catch (error) {
         // handle error
         alert(error.message);
@@ -103,7 +116,7 @@ const TechnologyActivity = () => {
         ref={useSwiper}
         //cards={categoryID(docs, "2")}
         //get all the latest news by their category ID
-        cards={categoryID(getLatestNews, techCategoryId)}
+        cards={categoryID(getLatestNews, advertCategoryId)}
         cardIndex={0}
         backgroundColor="transparent"
         stackSize={2}
@@ -111,50 +124,87 @@ const TechnologyActivity = () => {
         cardHorizontalMargin={0}
         animateCardOpacity
         disableBottomSwipe
+        disableRightSwipe
+        disableLeftSwipe={disablells}
         renderCard={(card) => (card && <Cardz card={card} />) || null}
-        onSwiped={(cardIndex) => {
-          //console.log("Card index " + cardIndex);
-          //get the current new url by its index
-          setNewsUrl(categoryID(getLatestNews, techCategoryId)[cardIndex].news_url);
-          //console.log(docs[cardIndex].created_at);
-        }}
+        //onSwiped={(cardIndex) => {
+        //console.log("Card index " + cardIndex);
+        //get the current new url by its index
+        /**
+         * Get the total number of news item returned
+         * and save it to state. i.e if the total number of
+         * news is 8, save it to state and use it to display to users
+         */
+        // if (categoryID(getLatestNews, 13).length) {
+        //   setNewsUrl(categoryID(getLatestNews, 13)[cardIndex].news_url);
+        // }
+        //console.log(docs[cardIndex].created_at);
+
+        //total number of news based on the category id
+        //console.log(categoryID(getLatestNews, 13).length);
+        //}}
         onSwipedAll={() => {
-          Alert.alert(
-            "End of News",
-            "You have read all latest news for today " + `${todaysDate()}`,
-            [
-              {
-                text: "Ok",
-                onPress: () => {
-                  return null;
-                },
-              },
-            ],
-            { cancelable: false }
-          );
+          setfinishswipe(true);
+          console.log("all items are sipped", finishswipe);
+          // Alert.alert(
+          //   "End of News",
+          //   "You have read all latest news for today " + `${todaysDate()}`,
+          //   [
+          //     {
+          //       text: "Ok",
+          //       onPress: () => {
+          //         //setRefreshPage("refresh");
+          //         //return null;
+          //         getDataUsingAsyncAwaitGetCall();
+          //       },
+          //     },
+          //   ],
+          //   { cancelable: false }
+          // );
         }}
-        onSwipedTop={() => {
-          //console.log("Ernest", getLatestNews);
-          //console.log(getLatestNews.map((item) => item));
-          //console.log("Today's date is " + todaysDate());
-          //   console.log(
-          //     "converted time is " + convertISODate("2020-11-11T16:26:13.000000Z")
-          //   );
-          //   console.log(
-          //     compareDate(
-          //       todaysDate(),
-          //       convertISODate("2020-12-29T16:26:13.000000Z")
-          //     )
-          //   );
-          //   console.log(categoryID(docs, "2"));
-        }}
-        onSwipedBottom={() => {
-          // <Toast message={success} onDismiss={() => {}} />
-        }}
-        onSwipedLeft={() => {
-          //console.log(getNewsUrl);
-          //open web browser for the news
-          HandleWebBrowserAsync(getNewsUrl);
+        // onSwipedTop={(cardIndex) => {
+        //   console.log("swipped", cardIndex);
+        //   if (finishswipe) {
+        //     return;
+        //   } else {
+        //     // console.log(
+        //     //   "Length of total news ",
+        //     //   categoryID(getLatestNews, 13).length
+        //     // );
+        //     //console.log(categoryID(getLatestNews, 13)[cardIndex]);
+        //     setNewsUrl(categoryID(getLatestNews, 13)[cardIndex].news_url);
+        //   }
+        //console.log("Ernest", getLatestNews);
+        //console.log(getLatestNews.map((item) => item));
+        //console.log("Today's date is " + todaysDate());
+        //   console.log(
+        //     "converted time is " + convertISODate("2020-11-11T16:26:13.000000Z")
+        //   );
+        //   console.log(
+        //     compareDate(
+        //       todaysDate(),
+        //       convertISODate("2020-12-29T16:26:13.000000Z")
+        //     )
+        //   );
+        //   console.log(categoryID(docs, "2"));
+        //}}
+        // onSwipedBottom={() => {
+        //   // <Toast message={success} onDismiss={() => {}} />
+        // }}
+        onSwipedLeft={(cardIndex) => {
+          // console.log("onSwipedLeft cardindex", cardIndex);
+          // console.log(
+          //   "onSwipedLeft cardindex2",
+          //   categoryID(getLatestNews, 13)[cardIndex]
+          // );
+          if (finishswipe) {
+            setdisablells(true);
+          } else {
+            //open web browser for the news
+            HandleWebBrowserAsync(
+              categoryID(getLatestNews, advertCategoryId)[cardIndex].news_url
+            );
+          }
         }}
       ></Swiper>
       {/* </View> */}

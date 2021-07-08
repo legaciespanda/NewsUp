@@ -30,13 +30,19 @@ const CustomSidebarMenu = (props) => {
   const [isLoggedIn, setisLoggedIn] = useState();
 
       useEffect(() => {
-             setTimeout(() => {
-               getUSerDetail();
+  
+          let mounted = true;
+          if (mounted) {
+            setTimeout(() => {
+              getUSerDetail();
               const subscriber = firebase
                 .auth()
                 .onAuthStateChanged(onAuthStateChanged);
               return subscriber;
-             }, 3000);
+            }, 3000);
+          }
+          //cancel all active subscription
+          return () => (mounted = false);
       }, []);
   
   function onAuthStateChanged(isLoggedIn) {

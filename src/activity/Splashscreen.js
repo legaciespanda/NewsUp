@@ -30,16 +30,21 @@ const SplashScreen = ({navigation}) => {
       return await AsyncStorage.getItem("@guest_login");
   }
   useEffect(() => {
-    if (checkConnected) {
-      setTimeout(() => {
-        setAnimating(false);
-        const subscriber = firebase
-          .auth()
-          .onAuthStateChanged(onAuthStateChanged);
-        return subscriber;
-      }, 4000);
-    }
-      });
+        let mounted = true;
+        if (mounted) {
+              if (checkConnected) {
+                setTimeout(() => {
+                  setAnimating(false);
+                  const subscriber = firebase
+                    .auth()
+                    .onAuthStateChanged(onAuthStateChanged);
+                  return subscriber;
+                }, 4000);
+              }
+        }
+        //cancel all active subscription
+        return () => (mounted = false);
+    }, []);
   
         function onAuthStateChanged(isLoggedIn) {
              setisLoggedIn(isLoggedIn);
